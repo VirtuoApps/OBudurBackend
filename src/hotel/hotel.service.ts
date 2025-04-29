@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Hotel, HotelDocument } from '../../common/schemas/Hotel.schema';
+import { Hotel, HotelDocument } from '../common/schemas/Hotel.schema';
 import { CreateHotelDto } from './dto/create-hotel.dto';
 import { UpdateHotelDto } from './dto/update-hotel.dto';
 // Import related services if validation is needed
@@ -15,9 +15,8 @@ import { UpdateHotelDto } from './dto/update-hotel.dto';
 @Injectable()
 export class HotelService {
   constructor(
-    @InjectModel(Hotel.name) private hotelModel: Model<HotelDocument>, // Inject related services if needed for validation
-  ) // private readonly featureService: FeatureService,
-  // private readonly distanceTypeService: DistanceTypeService,
+    @InjectModel(Hotel.name) private hotelModel: Model<HotelDocument>, // Inject related services if needed for validation // private readonly featureService: FeatureService,
+  ) // private readonly distanceTypeService: DistanceTypeService,
   {}
 
   async create(createHotelDto: CreateHotelDto): Promise<Hotel> {

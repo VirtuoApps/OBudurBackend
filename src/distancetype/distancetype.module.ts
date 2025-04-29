@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   DistanceType,
   DistanceTypeSchema,
-} from '../../common/schemas/DistanceType.schema';
+} from '../common/schemas/DistanceType.schema';
 import { DistanceTypeController } from './distancetype.controller';
 import { DistanceTypeService } from './distancetype.service';
 

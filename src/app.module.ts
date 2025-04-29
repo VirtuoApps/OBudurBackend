@@ -5,10 +5,10 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { LanguageModule } from './modules/language/language.module';
-import { FeatureModule } from './modules/feature/feature.module';
-import { DistanceTypeModule } from './modules/distancetype/distancetype.module';
-import { HotelModule } from './modules/hotel/hotel.module';
+import { LanguageModule } from './language/language.module';
+import { FeatureModule } from './feature/feature.module';
+import { DistanceTypeModule } from './distancetype/distancetype.module';
+import { HotelModule } from './hotel/hotel.module';
 
 @Module({
   imports: [

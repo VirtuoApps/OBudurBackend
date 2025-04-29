@@ -13,7 +13,7 @@ import {
 import { HotelService } from './hotel.service';
 import { CreateHotelDto } from './dto/create-hotel.dto';
 import { UpdateHotelDto } from './dto/update-hotel.dto';
-import { AdminGuard } from '../../common/guards/admin.guard';
+import { AdminGuard } from '../common/guards/admin.guard';
 
 @Controller('admin/hotels')
 @UseGuards(AdminGuard)

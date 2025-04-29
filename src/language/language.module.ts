@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Language, LanguageSchema } from '../../common/schemas/Language.schema';
+import { Language, LanguageSchema } from '../common/schemas/Language.schema';
 import { LanguageController } from './language.controller';
 import { LanguageService } from './language.service';
 

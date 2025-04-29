@@ -4,7 +4,7 @@ import { Model, Types } from 'mongoose';
 import {
   DistanceType,
   DistanceTypeDocument,
-} from '../../common/schemas/DistanceType.schema';
+} from '../common/schemas/DistanceType.schema';
 import { CreateDistanceTypeDto } from './dto/create-distancetype.dto';
 import { UpdateDistanceTypeDto } from './dto/update-distancetype.dto';
 

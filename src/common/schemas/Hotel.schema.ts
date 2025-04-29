@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types, Schema as MongooseSchema } from 'mongoose';
-import { GeoPoint, GeoPointSchema } from './GeoPoint.schema';
 
 export type HotelDocument = HydratedDocument<Hotel>;
 
@@ -21,6 +20,16 @@ class PriceSubSchema {
 
   @Prop({ type: String, default: 'USD' })
   currency: string;
+}
+
+// Define location schema directly in Hotel schema
+@Schema({ _id: false })
+class LocationSubSchema {
+  @Prop({ type: String, enum: ['Point'], required: true, default: 'Point' })
+  type: string;
+
+  @Prop({ type: [Number], required: true }) // [longitude, latitude]
+  coordinates: number[];
 }
 
 // --- Main Hotel Schema ---
@@ -97,8 +106,9 @@ export class Hotel {
   @Prop({ type: [DistanceSubSchema] })
   distances?: DistanceSubSchema[];
 
-  @Prop({ type: GeoPointSchema })
-  location?: GeoPoint;
+  // Location defined directly in the schema instead of referencing GeoPoint
+  @Prop({ type: LocationSubSchema })
+  location?: LocationSubSchema;
 
   @Prop({ type: String })
   locationAsString?: string;
@@ -110,4 +120,4 @@ export class Hotel {
 export const HotelSchema = SchemaFactory.createForClass(Hotel);
 
 // Add 2dsphere index for location
-HotelSchema.index({ location: '2dsphere' });
+HotelSchema.index({ 'location.coordinates': '2dsphere' });

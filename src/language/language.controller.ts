@@ -12,7 +12,7 @@ import {
 import { LanguageService } from './language.service';
 import { CreateLanguageDto } from './dto/create-language.dto';
 import { UpdateLanguageDto } from './dto/update-language.dto';
-import { AdminGuard } from '../../common/guards/admin.guard'; // Import the guard
+import { AdminGuard } from '../common/guards/admin.guard'; // Import the guard
 
 @Controller('admin/languages') // Prefix routes with 'admin/languages'
 @UseGuards(AdminGuard) // Apply AdminGuard to all routes in this controller

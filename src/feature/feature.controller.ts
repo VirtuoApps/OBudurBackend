@@ -12,7 +12,7 @@ import {
 import { FeatureService } from './feature.service';
 import { CreateFeatureDto } from './dto/create-feature.dto';
 import { UpdateFeatureDto } from './dto/update-feature.dto';
-import { AdminGuard } from '../../common/guards/admin.guard';
+import { AdminGuard } from '../common/guards/admin.guard';
 
 @Controller('admin/features')
 @UseGuards(AdminGuard)

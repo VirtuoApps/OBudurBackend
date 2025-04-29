@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Hotel, HotelSchema } from '../../common/schemas/Hotel.schema';
+import { Hotel, HotelSchema } from '../common/schemas/Hotel.schema';
 import { HotelController } from './hotel.controller';
 import { HotelService } from './hotel.service';
 // Import related modules if needed for validation (e.g., check if FeatureIds/DistanceTypeIds exist)

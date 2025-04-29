@@ -12,7 +12,7 @@ import {
 import { DistanceTypeService } from './distancetype.service';
 import { CreateDistanceTypeDto } from './dto/create-distancetype.dto';
 import { UpdateDistanceTypeDto } from './dto/update-distancetype.dto';
-import { AdminGuard } from '../../common/guards/admin.guard';
+import { AdminGuard } from '../common/guards/admin.guard';
 
 @Controller('admin/distance-types') // Use kebab-case for URL
 @UseGuards(AdminGuard)

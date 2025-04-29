@@ -8,9 +8,6 @@ export class Feature {
   @Prop({ type: MongooseSchema.Types.Map, of: String, required: true })
   name: Map<string, string>;
 
-  @Prop({ type: MongooseSchema.Types.Map, of: String })
-  labels?: Map<string, string>;
-
   @Prop({ type: String, required: true })
   iconUrl: string;
 
