@@ -1,0 +1,174 @@
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsNumber,
+  IsArray,
+  ValidateNested,
+  IsMongoId,
+  IsObject,
+  IsIn,
+  Min,
+  ArrayNotEmpty,
+  ArrayMinSize,
+  MaxLength,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+
+// --- Sub-DTOs ---
+class PriceDto {
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  amount?: number;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(3)
+  currency?: string; // Defaults to USD in schema
+}
+
+class DistanceDto {
+  @IsMongoId()
+  @IsNotEmpty()
+  typeId: string; // Validate as MongoId string
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(0)
+  value: number;
+}
+
+class GeoPointDto {
+  @IsString()
+  @IsIn(['Point'])
+  @IsNotEmpty()
+  type: 'Point';
+
+  @IsArray()
+  @ArrayNotEmpty()
+  @ArrayMinSize(2)
+  @IsNumber({}, { each: true })
+  coordinates: [number, number];
+}
+
+// --- Main DTOs ---
+export class CreateHotelDto {
+  @IsNumber()
+  @IsNotEmpty()
+  no: number;
+
+  @IsString()
+  @IsNotEmpty()
+  slug: string;
+
+  @IsObject()
+  @IsNotEmpty()
+  title: Record<string, string>;
+
+  @IsObject()
+  @IsOptional()
+  description?: Record<string, string>;
+
+  @IsObject()
+  @IsOptional()
+  address?: Record<string, string>;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => PriceDto)
+  price?: PriceDto;
+
+  @IsArray()
+  @IsOptional()
+  @IsString({ each: true })
+  images?: string[];
+
+  /* Details */
+  @IsString()
+  @IsOptional()
+  roomAsText?: string;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  projectArea?: number;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  totalSize?: number;
+
+  @IsNumber()
+  @IsOptional()
+  buildYear?: number;
+
+  @IsString()
+  @IsOptional()
+  architect?: string;
+
+  @IsString()
+  @IsOptional()
+  kitchenType?: string;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  roomCount?: number;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  bathroomCount?: number;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  balconyCount?: number;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  bedRoomCount?: number;
+
+  @IsString()
+  @IsOptional()
+  floorType?: string;
+
+  @IsString()
+  @IsOptional()
+  housingType?: string;
+
+  @IsString()
+  @IsOptional()
+  entranceType?: string;
+
+  @IsString()
+  @IsOptional()
+  listingType?: string;
+
+  /* Relations */
+  @IsArray()
+  @IsOptional()
+  @IsMongoId({ each: true })
+  featureIds?: string[];
+
+  @IsArray()
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => DistanceDto)
+  distances?: DistanceDto[];
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => GeoPointDto)
+  location?: GeoPointDto;
+
+  @IsString()
+  @IsOptional()
+  locationAsString?: string;
+
+  @IsArray()
+  @IsOptional() // How to validate Mixed type? Allow any array for now.
+  documents?: any[];
+}
