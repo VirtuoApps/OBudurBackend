@@ -5,6 +5,7 @@ import { Feature, FeatureDocument } from '../common/schemas/Feature.schema';
 import { CreateFeatureDto } from './dto/create-feature.dto';
 import { UpdateFeatureDto } from './dto/update-feature.dto';
 import generalPaginate, { queryType } from 'src/common/utils/general-paginate';
+import { GetFeaturesDto } from './dto/get-features.dto';
 
 @Injectable()
 export class FeatureService {
@@ -22,12 +23,20 @@ export class FeatureService {
     return createdFeature.save();
   }
 
-  async findAll(query: queryType) {
+  async findAll(query: queryType, getFeaturesDto: GetFeaturesDto) {
+    const { featureType } = getFeaturesDto;
+
+    const extraQueries: any = {};
+
+    if (featureType) {
+      extraQueries.featureType = featureType;
+    }
+
     return await generalPaginate({
       model: this.featureModel,
       query,
       searchFields: ['name.tr', 'name.en'], // Adjust fields as necessary
-      extraQueries: {},
+      extraQueries,
     });
   }
 
