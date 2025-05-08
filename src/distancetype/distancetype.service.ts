@@ -7,6 +7,7 @@ import {
 } from '../common/schemas/DistanceType.schema';
 import { CreateDistanceTypeDto } from './dto/create-distancetype.dto';
 import { UpdateDistanceTypeDto } from './dto/update-distancetype.dto';
+import generalPaginate, { queryType } from 'src/common/utils/general-paginate';
 
 @Injectable()
 export class DistanceTypeService {
@@ -20,8 +21,13 @@ export class DistanceTypeService {
     return created.save();
   }
 
-  async findAll(): Promise<DistanceType[]> {
-    return this.distanceTypeModel.find().exec();
+  async findAll(query: queryType) {
+    return await generalPaginate({
+      model: this.distanceTypeModel,
+      query,
+      searchFields: ['name.tr', 'name.en'], // Adjust fields as necessary
+      extraQueries: {},
+    });
   }
 
   async findOne(id: string): Promise<DistanceType> {

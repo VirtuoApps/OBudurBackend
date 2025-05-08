@@ -4,6 +4,7 @@ import { Model, Types } from 'mongoose';
 import { Feature, FeatureDocument } from '../common/schemas/Feature.schema';
 import { CreateFeatureDto } from './dto/create-feature.dto';
 import { UpdateFeatureDto } from './dto/update-feature.dto';
+import generalPaginate, { queryType } from 'src/common/utils/general-paginate';
 
 @Injectable()
 export class FeatureService {
@@ -16,16 +17,18 @@ export class FeatureService {
     const featureData = {
       ...createFeatureDto,
       name: new Map(Object.entries(createFeatureDto.name)),
-      labels: createFeatureDto.labels
-        ? new Map(Object.entries(createFeatureDto.labels))
-        : undefined,
     };
     const createdFeature = new this.featureModel(featureData);
     return createdFeature.save();
   }
 
-  async findAll(): Promise<Feature[]> {
-    return this.featureModel.find().exec();
+  async findAll(query: queryType) {
+    return await generalPaginate({
+      model: this.featureModel,
+      query,
+      searchFields: ['name.tr', 'name.en'], // Adjust fields as necessary
+      extraQueries: {},
+    });
   }
 
   async findOne(id: string): Promise<Feature> {
@@ -50,9 +53,6 @@ export class FeatureService {
     const updateData: any = { ...updateFeatureDto };
     if (updateFeatureDto.name) {
       updateData.name = new Map(Object.entries(updateFeatureDto.name));
-    }
-    if (updateFeatureDto.labels) {
-      updateData.labels = new Map(Object.entries(updateFeatureDto.labels));
     }
 
     const updatedFeature = await this.featureModel

@@ -6,10 +6,6 @@ export class UpdateFeatureDto {
   @IsOptional()
   name?: Record<string, string>;
 
-  @IsObject()
-  @IsOptional()
-  labels?: Record<string, string>;
-
   @IsUrl()
   @IsOptional()
   iconUrl?: string;

@@ -1,10 +1,10 @@
-import { IsString, IsOptional, IsUrl, IsIn } from 'class-validator';
+import { IsObject, IsOptional, IsString, IsUrl, IsIn } from 'class-validator';
 
 // Manually define Update DTO
 export class UpdateDistanceTypeDto {
-  @IsString()
+  @IsObject()
   @IsOptional()
-  name?: string;
+  name?: Record<string, string>;
 
   @IsUrl()
   @IsOptional()

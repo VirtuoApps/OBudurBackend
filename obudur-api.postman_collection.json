@@ -1,0 +1,466 @@
+{
+  "info": {
+    "_postman_id": "e7a5f35e-6e6a-4caa-9990-bf9e1beb8c3e",
+    "name": "OBUDUR Backend API",
+    "description": "OBUDUR Backend API Collection for testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"password\": \"Password123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Kullanıcı kaydı oluşturur"
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"Password123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Kullanıcı girişi yapar ve JWT token döndürür"
+          },
+          "response": []
+        },
+        {
+          "name": "Resend Verification Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/resend-verify-email",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "resend-verify-email"]
+            },
+            "description": "Doğrulama e-postasını yeniden gönderir"
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Email",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/verify-email/:verifyCode",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "verify-email", ":verifyCode"],
+              "variable": [
+                {
+                  "key": "verifyCode",
+                  "value": "verification_code_here"
+                }
+              ]
+            },
+            "description": "E-posta adresini doğrular"
+          },
+          "response": []
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"test@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/forgot-password",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "forgot-password"]
+            },
+            "description": "Şifre sıfırlama maili gönderir"
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"password\": \"NewPassword123!\",\n    \"confirmPassword\": \"NewPassword123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/reset-password/:forgotPasswordCode",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "reset-password", ":forgotPasswordCode"],
+              "variable": [
+                {
+                  "key": "forgotPasswordCode",
+                  "value": "reset_code_here"
+                }
+              ]
+            },
+            "description": "Şifreyi sıfırlar"
+          },
+          "response": []
+        }
+      ],
+      "description": "Kimlik doğrulama ve kullanıcı yönetimi ile ilgili endpointler"
+    },
+    {
+      "name": "Hotels",
+      "item": [
+        {
+          "name": "Get All Hotels",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/hotels",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "hotels"]
+            },
+            "description": "Tüm otelleri listeler (Admin yetkisi gerekli)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Hotel by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/hotels/:id",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "hotels", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "hotel_id_here"
+                }
+              ]
+            },
+            "description": "Belirli bir oteli ID'sine göre getirir (Admin yetkisi gerekli)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Hotel",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Sample Hotel\",\n    \"description\": \"A great hotel in the city center\",\n    \"address\": \"123 Main St, City\",\n    \"features\": [\"feature_id_1\", \"feature_id_2\"],\n    \"distanceTypes\": [{\n        \"distanceType\": \"distance_type_id\",\n        \"distance\": 2.5\n    }]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/hotels",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "hotels"]
+            },
+            "description": "Yeni otel oluşturur (Admin yetkisi gerekli)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Hotel",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Hotel Name\",\n    \"description\": \"Updated description\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/hotels/:id",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "hotels", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "hotel_id_here"
+                }
+              ]
+            },
+            "description": "Oteli günceller (Admin yetkisi gerekli)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Hotel",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/hotels/:id",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "hotels", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "hotel_id_here"
+                }
+              ]
+            },
+            "description": "Oteli siler (Admin yetkisi gerekli)"
+          },
+          "response": []
+        }
+      ],
+      "description": "Otel yönetimi ile ilgili endpointler"
+    },
+    {
+      "name": "Features",
+      "item": [
+        {
+          "name": "Get All Features",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/features",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "features"]
+            },
+            "description": "Tüm özellikleri listeler (Admin yetkisi gerekli)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Feature by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/features/:id",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "features", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "feature_id_here"
+                }
+              ]
+            },
+            "description": "Belirli bir özelliği ID'sine göre getirir (Admin yetkisi gerekli)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Feature",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": {\n        \"en\": \"WiFi\",\n        \"tr\": \"Kablosuz İnternet\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/features",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "features"]
+            },
+            "description": "Yeni özellik oluşturur (Admin yetkisi gerekli)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Feature",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": {\n        \"en\": \"Free WiFi\",\n        \"tr\": \"Ücretsiz Kablosuz İnternet\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/features/:id",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "features", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "feature_id_here"
+                }
+              ]
+            },
+            "description": "Özelliği günceller (Admin yetkisi gerekli)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Feature",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/features/:id",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "features", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "feature_id_here"
+                }
+              ]
+            },
+            "description": "Özelliği siler (Admin yetkisi gerekli)"
+          },
+          "response": []
+        }
+      ],
+      "description": "Otel özellikleri yönetimi ile ilgili endpointler"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

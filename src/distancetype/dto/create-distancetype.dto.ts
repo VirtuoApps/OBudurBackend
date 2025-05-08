@@ -1,9 +1,16 @@
-import { IsString, IsNotEmpty, IsOptional, IsUrl, IsIn } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsUrl,
+  IsIn,
+  IsObject,
+} from 'class-validator';
 
 export class CreateDistanceTypeDto {
-  @IsString()
+  @IsObject()
   @IsNotEmpty()
-  name: string;
+  name: Record<string, string>;
 
   @IsUrl()
   @IsOptional()

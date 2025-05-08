@@ -14,9 +14,9 @@ import { HotelService } from './hotel.service';
 import { CreateHotelDto } from './dto/create-hotel.dto';
 import { UpdateHotelDto } from './dto/update-hotel.dto';
 import { AdminGuard } from '../common/guards/admin.guard';
-
+import { AuthGuard } from '@nestjs/passport';
 @Controller('admin/hotels')
-@UseGuards(AdminGuard)
+@UseGuards(AuthGuard('jwt'), AdminGuard)
 export class HotelController {
   constructor(private readonly hotelService: HotelService) {}
 

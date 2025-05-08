@@ -8,14 +8,17 @@ import {
   Delete,
   UseGuards,
   ValidationPipe,
+  Query,
 } from '@nestjs/common';
 import { FeatureService } from './feature.service';
 import { CreateFeatureDto } from './dto/create-feature.dto';
 import { UpdateFeatureDto } from './dto/update-feature.dto';
 import { AdminGuard } from '../common/guards/admin.guard';
+import { AuthGuard } from '@nestjs/passport';
+import { queryType } from 'src/common/utils/general-paginate';
 
 @Controller('admin/features')
-@UseGuards(AdminGuard)
+@UseGuards(AuthGuard('jwt'), AdminGuard)
 export class FeatureController {
   constructor(private readonly featureService: FeatureService) {}
 
@@ -25,8 +28,8 @@ export class FeatureController {
   }
 
   @Get()
-  findAll() {
-    return this.featureService.findAll();
+  findAll(@Query() query: queryType) {
+    return this.featureService.findAll(query);
   }
 
   @Get(':id')

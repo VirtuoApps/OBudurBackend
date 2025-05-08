@@ -22,10 +22,6 @@ export class CreateFeatureDto {
   @IsNotEmpty()
   name: Record<string, string>; // Use Record<string, string> which maps well to Map
 
-  @IsObject()
-  @IsOptional()
-  labels?: Record<string, string>;
-
   @IsUrl()
   @IsNotEmpty()
   iconUrl: string;

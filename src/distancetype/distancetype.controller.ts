@@ -8,14 +8,16 @@ import {
   Delete,
   UseGuards,
   ValidationPipe,
+  Query,
 } from '@nestjs/common';
 import { DistanceTypeService } from './distancetype.service';
 import { CreateDistanceTypeDto } from './dto/create-distancetype.dto';
 import { UpdateDistanceTypeDto } from './dto/update-distancetype.dto';
 import { AdminGuard } from '../common/guards/admin.guard';
-
+import { AuthGuard } from '@nestjs/passport';
+import { queryType } from 'src/common/utils/general-paginate';
 @Controller('admin/distance-types') // Use kebab-case for URL
-@UseGuards(AdminGuard)
+@UseGuards(AuthGuard('jwt'), AdminGuard)
 export class DistanceTypeController {
   constructor(private readonly distanceTypeService: DistanceTypeService) {}
 
@@ -25,8 +27,8 @@ export class DistanceTypeController {
   }
 
   @Get()
-  findAll() {
-    return this.distanceTypeService.findAll();
+  findAll(@Query() query: queryType) {
+    return this.distanceTypeService.findAll(query);
   }
 
   @Get(':id')
