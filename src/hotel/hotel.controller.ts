@@ -15,6 +15,7 @@ import { CreateHotelDto } from './dto/create-hotel.dto';
 import { UpdateHotelDto } from './dto/update-hotel.dto';
 import { AdminGuard } from '../common/guards/admin.guard';
 import { AuthGuard } from '@nestjs/passport';
+import { queryType } from 'src/common/utils/general-paginate';
 @Controller('admin/hotels')
 @UseGuards(AuthGuard('jwt'), AdminGuard)
 export class HotelController {
@@ -27,10 +28,10 @@ export class HotelController {
   }
 
   @Get()
-  findAll(/* @Query() queryParams: any */) {
+  findAll(@Query() queryParams: queryType) {
     // Placeholder for query params
     // Add filtering/pagination based on queryParams later
-    return this.hotelService.findAll();
+    return this.hotelService.findAll(queryParams);
   }
 
   @Get(':id')

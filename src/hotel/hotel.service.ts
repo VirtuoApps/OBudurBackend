@@ -9,6 +9,7 @@ import { Hotel, HotelDocument } from '../common/schemas/Hotel.schema';
 import { CreateHotelDto } from './dto/create-hotel.dto';
 import { UpdateHotelDto } from './dto/update-hotel.dto';
 import slugify from 'slugify';
+import generalPaginate, { queryType } from 'src/common/utils/general-paginate';
 // Import related services if validation is needed
 // import { FeatureService } from '../feature/feature.service';
 // import { DistanceTypeService } from '../distancetype/distancetype.service';
@@ -80,9 +81,14 @@ export class HotelService {
     }
   }
 
-  async findAll(): Promise<Hotel[]> {
+  async findAll(query: queryType) {
     // Consider adding pagination later
-    return this.hotelModel.find().exec();
+    return await generalPaginate({
+      model: this.hotelModel,
+      query,
+      searchFields: ['title.en', 'title.tr'],
+      extraQueries: {},
+    });
   }
 
   async findOne(id: string): Promise<Hotel> {
