@@ -26,6 +26,11 @@ export class LanguageController {
     return this.languageService.create(createLanguageDto);
   }
 
+  @Get('/all-options')
+  allOptions() {
+    return this.languageService.allOptions();
+  }
+
   @Get()
   findAll(@Query() query: queryType) {
     return this.languageService.findAll(query);

@@ -33,6 +33,10 @@ export class LanguageService {
     });
   }
 
+  async allOptions() {
+    return await this.languageModel.find().exec();
+  }
+
   async findOne(id: string): Promise<Language> {
     if (!Types.ObjectId.isValid(id)) {
       throw new NotFoundException(`Invalid Language ID: ${id}`);
