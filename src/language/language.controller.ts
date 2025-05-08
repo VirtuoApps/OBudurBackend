@@ -8,14 +8,16 @@ import {
   Delete,
   UseGuards,
   ValidationPipe,
+  Query,
 } from '@nestjs/common';
 import { LanguageService } from './language.service';
 import { CreateLanguageDto } from './dto/create-language.dto';
 import { UpdateLanguageDto } from './dto/update-language.dto';
 import { AdminGuard } from '../common/guards/admin.guard'; // Import the guard
-
+import { AuthGuard } from '@nestjs/passport';
+import { queryType } from 'src/common/utils/general-paginate';
 @Controller('admin/languages') // Prefix routes with 'admin/languages'
-@UseGuards(AdminGuard) // Apply AdminGuard to all routes in this controller
+@UseGuards(AuthGuard('jwt'), AdminGuard) // Apply AdminGuard to all routes in this controller
 export class LanguageController {
   constructor(private readonly languageService: LanguageService) {}
 
@@ -25,8 +27,8 @@ export class LanguageController {
   }
 
   @Get()
-  findAll() {
-    return this.languageService.findAll();
+  findAll(@Query() query: queryType) {
+    return this.languageService.findAll(query);
   }
 
   // Optional: Endpoint to get the default language

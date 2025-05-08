@@ -4,6 +4,7 @@ import { Model, Types } from 'mongoose';
 import { Language, LanguageDocument } from '../common/schemas/Language.schema';
 import { CreateLanguageDto } from './dto/create-language.dto';
 import { UpdateLanguageDto } from './dto/update-language.dto';
+import generalPaginate, { queryType } from 'src/common/utils/general-paginate';
 
 @Injectable()
 export class LanguageService {
@@ -23,8 +24,13 @@ export class LanguageService {
     return createdLanguage.save();
   }
 
-  async findAll(): Promise<Language[]> {
-    return this.languageModel.find().exec();
+  async findAll(query: queryType) {
+    return await generalPaginate({
+      model: this.languageModel,
+      query,
+      searchFields: ['name', 'nativeName'], // Adjust fields as necessary
+      extraQueries: {},
+    });
   }
 
   async findOne(id: string): Promise<Language> {
