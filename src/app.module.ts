@@ -9,6 +9,8 @@ import { LanguageModule } from './language/language.module';
 import { FeatureModule } from './feature/feature.module';
 import { DistanceTypeModule } from './distancetype/distancetype.module';
 import { HotelModule } from './hotel/hotel.module';
+import { FileSystemModule } from './file-system/file-system.module';
+import { CloudflareR2Module } from './cloudflare-r2/cloudflare-r2.module';
 
 @Module({
   imports: [
@@ -17,6 +19,7 @@ import { HotelModule } from './hotel/hotel.module';
     FeatureModule,
     DistanceTypeModule,
     HotelModule,
+    CloudflareR2Module,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -34,6 +37,7 @@ import { HotelModule } from './hotel/hotel.module';
         from: process.env.MAIL_FROM,
       },
     }),
+    FileSystemModule,
   ],
   controllers: [AppController],
   providers: [AppService],
