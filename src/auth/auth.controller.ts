@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   Patch,
   Post,
@@ -19,6 +20,12 @@ import { ForgotPasswordDto } from './dto/forgot-password.dto';
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+
+  @Get('/mine')
+  @UseGuards(AuthGuard('jwt'))
+  mine(@UserId() userId: string) {
+    return this.authService.mine(userId);
+  }
 
   @Post('/register')
   register(@Body() registerDto: RegisterDto) {

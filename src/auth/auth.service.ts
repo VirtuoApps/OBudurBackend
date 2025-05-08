@@ -23,6 +23,20 @@ export class AuthService {
     private mailService: MailService,
   ) {}
 
+  async mine(userId: string) {
+    const user = await this.users.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException({
+        errorCode: errorCodes.USER_NOT_FOUND,
+        message: 'Kullanıcı bulunamadı',
+        statusCode: 404,
+      });
+    }
+
+    return user;
+  }
+
   /**
    * Generates JWT access token for a user
    * @param user - The user object containing email and verification status
