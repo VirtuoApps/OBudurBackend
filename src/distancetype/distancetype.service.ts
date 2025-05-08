@@ -16,6 +16,10 @@ export class DistanceTypeService {
     private distanceTypeModel: Model<DistanceTypeDocument>,
   ) {}
 
+  async allOptions() {
+    return await this.distanceTypeModel.find().exec();
+  }
+
   async create(createDto: CreateDistanceTypeDto): Promise<DistanceType> {
     const created = new this.distanceTypeModel(createDto);
     return created.save();

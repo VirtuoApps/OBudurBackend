@@ -26,4 +26,25 @@ export class FileSystemService {
       location: fileRes.location,
     };
   }
+
+  async uploadFile(file: any) {
+    if (!file) {
+      throw new NotFoundException({
+        errorCode: errorCodes.FILE_NOT_FOUND,
+        message: 'Dosya bulunamadı',
+        statusCode: 404,
+      });
+    }
+
+    const now = new Date();
+
+    const fileRes = await this.cloudflareR2Service.uploadFileToS3(
+      file.buffer,
+      `files/${now.getTime()}.${file.originalname.split('.').pop()}`,
+    );
+
+    return {
+      location: fileRes.location,
+    };
+  }
 }

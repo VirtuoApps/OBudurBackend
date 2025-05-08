@@ -24,6 +24,11 @@ import { GetFeaturesDto } from './dto/get-features.dto';
 export class FeatureController {
   constructor(private readonly featureService: FeatureService) {}
 
+  @Get('/all-options')
+  allOptions() {
+    return this.featureService.allOptions();
+  }
+
   @Post()
   create(@Body(ValidationPipe) createFeatureDto: CreateFeatureDto) {
     return this.featureService.create(createFeatureDto);

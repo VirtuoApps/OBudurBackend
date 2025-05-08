@@ -13,6 +13,10 @@ export class FeatureService {
     @InjectModel(Feature.name) private featureModel: Model<FeatureDocument>,
   ) {}
 
+  async allOptions() {
+    return await this.featureModel.find().exec();
+  }
+
   async create(createFeatureDto: CreateFeatureDto): Promise<Feature> {
     // Convert Record<string, string> back to Map for Mongoose
     const featureData = {

@@ -1,5 +1,6 @@
 import {
   IsString,
+  IsNotEmpty,
   IsOptional,
   IsNumber,
   IsArray,
@@ -9,6 +10,7 @@ import {
   IsIn,
   Min,
   ArrayMinSize,
+  ArrayNotEmpty,
   MaxLength,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -25,16 +27,16 @@ class PriceUpdateDto {
   @IsString()
   @IsOptional()
   @MaxLength(3)
-  currency?: string;
+  currency?: string; // Defaults to USD in schema
 }
 
 class DistanceUpdateDto {
   @IsMongoId()
-  @IsOptional() // Make typeId optional for update
+  @IsOptional()
   typeId?: string;
 
   @IsNumber()
-  @IsOptional() // Make value optional for update
+  @IsOptional()
   @Min(0)
   value?: number;
 }
@@ -47,7 +49,6 @@ class GeoPointUpdateDto {
 
   @IsArray()
   @ArrayMinSize(2)
-  // @ArrayMaxSize(2) // Removed
   @IsNumber({}, { each: true })
   @IsOptional()
   coordinates?: [number, number];
@@ -79,7 +80,7 @@ export class UpdateHotelDto {
   @IsOptional()
   @ValidateNested()
   @Type(() => PriceUpdateDto)
-  price?: PriceUpdateDto;
+  price?: PriceUpdateDto[];
 
   @IsArray()
   @IsOptional()
@@ -109,9 +110,9 @@ export class UpdateHotelDto {
   @IsOptional()
   architect?: string;
 
-  @IsString()
+  @IsObject()
   @IsOptional()
-  kitchenType?: string;
+  kitchenType?: Record<string, string>;
 
   @IsNumber()
   @IsOptional()
@@ -133,21 +134,21 @@ export class UpdateHotelDto {
   @Min(0)
   bedRoomCount?: number;
 
-  @IsString()
+  @IsObject()
   @IsOptional()
-  floorType?: string;
+  floorType?: Record<string, string>;
 
-  @IsString()
+  @IsObject()
   @IsOptional()
-  housingType?: string;
+  housingType?: Record<string, string>;
 
-  @IsString()
+  @IsObject()
   @IsOptional()
-  entranceType?: string;
+  entranceType?: Record<string, string>;
 
-  @IsString()
+  @IsObject()
   @IsOptional()
-  listingType?: string;
+  listingType?: Record<string, string>;
 
   /* Relations */
   @IsArray()

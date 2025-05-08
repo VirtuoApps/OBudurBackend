@@ -16,4 +16,10 @@ export class FileSystemController {
   uploadImage(@UploadedFile() file: any) {
     return this.fileSystemService.uploadImage(file);
   }
+
+  @Post('/file')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(@UploadedFile() file: any) {
+    return this.fileSystemService.uploadFile(file);
+  }
 }

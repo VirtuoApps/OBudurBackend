@@ -21,6 +21,11 @@ import { queryType } from 'src/common/utils/general-paginate';
 export class DistanceTypeController {
   constructor(private readonly distanceTypeService: DistanceTypeService) {}
 
+  @Get('/all-options')
+  allOptions() {
+    return this.distanceTypeService.allOptions();
+  }
+
   @Post()
   create(@Body(ValidationPipe) createDto: CreateDistanceTypeDto) {
     return this.distanceTypeService.create(createDto);
