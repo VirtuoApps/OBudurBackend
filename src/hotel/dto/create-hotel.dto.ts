@@ -54,14 +54,6 @@ class GeoPointDto {
 
 // --- Main DTOs ---
 export class CreateHotelDto {
-  @IsNumber()
-  @IsNotEmpty()
-  no: number;
-
-  @IsString()
-  @IsNotEmpty()
-  slug: string;
-
   @IsObject()
   @IsNotEmpty()
   title: Record<string, string>;
@@ -77,7 +69,7 @@ export class CreateHotelDto {
   @IsOptional()
   @ValidateNested()
   @Type(() => PriceDto)
-  price?: PriceDto;
+  price?: PriceDto[];
 
   @IsArray()
   @IsOptional()
@@ -107,9 +99,9 @@ export class CreateHotelDto {
   @IsOptional()
   architect?: string;
 
-  @IsString()
+  @IsObject()
   @IsOptional()
-  kitchenType?: string;
+  kitchenType?: Record<string, string>;
 
   @IsNumber()
   @IsOptional()
@@ -131,21 +123,21 @@ export class CreateHotelDto {
   @Min(0)
   bedRoomCount?: number;
 
-  @IsString()
+  @IsObject()
   @IsOptional()
-  floorType?: string;
+  floorType?: Record<string, string>;
 
-  @IsString()
+  @IsObject()
   @IsOptional()
-  housingType?: string;
+  housingType?: Record<string, string>;
 
-  @IsString()
+  @IsObject()
   @IsOptional()
-  entranceType?: string;
+  entranceType?: Record<string, string>;
 
-  @IsString()
+  @IsObject()
   @IsOptional()
-  listingType?: string;
+  listingType?: Record<string, string>;
 
   /* Relations */
   @IsArray()
@@ -163,10 +155,6 @@ export class CreateHotelDto {
   @ValidateNested()
   @Type(() => GeoPointDto)
   location?: GeoPointDto;
-
-  @IsString()
-  @IsOptional()
-  locationAsString?: string;
 
   @IsArray()
   @IsOptional() // How to validate Mixed type? Allow any array for now.

@@ -8,6 +8,7 @@ import { Model, Types } from 'mongoose';
 import { Hotel, HotelDocument } from '../common/schemas/Hotel.schema';
 import { CreateHotelDto } from './dto/create-hotel.dto';
 import { UpdateHotelDto } from './dto/update-hotel.dto';
+import slugify from 'slugify';
 // Import related services if validation is needed
 // import { FeatureService } from '../feature/feature.service';
 // import { DistanceTypeService } from '../distancetype/distancetype.service';
@@ -15,18 +16,37 @@ import { UpdateHotelDto } from './dto/update-hotel.dto';
 @Injectable()
 export class HotelService {
   constructor(
-    @InjectModel(Hotel.name) private hotelModel: Model<HotelDocument>, // Inject related services if needed for validation // private readonly featureService: FeatureService,
-  ) // private readonly distanceTypeService: DistanceTypeService,
-  {}
+    @InjectModel(Hotel.name) private hotelModel: Model<HotelDocument>, // Inject related services if needed for validation // private readonly featureService: FeatureService, // private readonly distanceTypeService: DistanceTypeService,
+  ) {}
 
   async create(createHotelDto: CreateHotelDto): Promise<Hotel> {
     // TODO: Add validation if featureIds and distanceTypeIds exist in their respective collections
     // Requires injecting FeatureService and DistanceTypeService
     // await this.validateRelations(createHotelDto.featureIds, createHotelDto.distances?.map(d => d.typeId));
 
+    let hotelNo = Math.floor(100000000 + Math.random() * 900000000).toString();
+
+    let isExists = true;
+
+    while (isExists) {
+      const hotel = await this.hotelModel.findOne({ no: hotelNo });
+      if (hotel) {
+        hotelNo = Math.floor(100000000 + Math.random() * 900000000).toString();
+      } else {
+        isExists = false;
+      }
+    }
+
+    const slug = slugify(createHotelDto.title.en, {
+      lower: true,
+      strict: true,
+    });
+
     // Convert DTO Maps (Record<string, string>) back to actual Maps
     const hotelData: any = {
       ...createHotelDto,
+      no: hotelNo,
+      slug,
       title: new Map(Object.entries(createHotelDto.title)),
       description: createHotelDto.description
         ? new Map(Object.entries(createHotelDto.description))

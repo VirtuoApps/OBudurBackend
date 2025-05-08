@@ -50,8 +50,8 @@ export class Hotel {
   @Prop({ type: MongooseSchema.Types.Map, of: String })
   address?: Map<string, string>;
 
-  @Prop({ type: PriceSubSchema })
-  price?: PriceSubSchema;
+  @Prop({ type: [PriceSubSchema] })
+  price?: PriceSubSchema[];
 
   @Prop({ type: [String] })
   images?: string[];
@@ -72,8 +72,8 @@ export class Hotel {
   @Prop({ type: String })
   architect?: string;
 
-  @Prop({ type: String })
-  kitchenType?: string;
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  kitchenType?: Map<string, string>;
 
   @Prop({ type: Number })
   roomCount?: number;
@@ -87,17 +87,17 @@ export class Hotel {
   @Prop({ type: Number })
   bedRoomCount?: number;
 
-  @Prop({ type: String })
-  floorType?: string;
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  floorType?: Map<string, string>;
 
-  @Prop({ type: String })
-  housingType?: string;
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  housingType?: Map<string, string>;
 
-  @Prop({ type: String })
-  entranceType?: string;
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  entranceType?: Map<string, string>;
 
-  @Prop({ type: String })
-  listingType?: string;
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  listingType?: Map<string, string>;
 
   /* Relational fields (raw ObjectId) */
   @Prop({ type: [{ type: MongooseSchema.Types.ObjectId }] })
@@ -109,9 +109,6 @@ export class Hotel {
   // Location defined directly in the schema instead of referencing GeoPoint
   @Prop({ type: LocationSubSchema })
   location?: LocationSubSchema;
-
-  @Prop({ type: String })
-  locationAsString?: string;
 
   @Prop({ type: [MongooseSchema.Types.Mixed] }) // For documents
   documents?: any[];
