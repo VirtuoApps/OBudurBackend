@@ -11,6 +11,7 @@ import { DistanceTypeModule } from './distancetype/distancetype.module';
 import { HotelModule } from './hotel/hotel.module';
 import { FileSystemModule } from './file-system/file-system.module';
 import { CloudflareR2Module } from './cloudflare-r2/cloudflare-r2.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { CloudflareR2Module } from './cloudflare-r2/cloudflare-r2.module';
       },
     }),
     FileSystemModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
