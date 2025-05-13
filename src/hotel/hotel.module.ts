@@ -4,6 +4,7 @@ import { Hotel, HotelSchema } from '../common/schemas/Hotel.schema';
 import { HotelController } from './hotel.controller';
 import { HotelService } from './hotel.service';
 import { AuthModule } from 'src/auth/auth.module';
+import { HotelUserController } from './hotel.user.controller';
 // Import related modules if needed for validation (e.g., check if FeatureIds/DistanceTypeIds exist)
 // import { FeatureModule } from '../feature/feature.module';
 // import { DistanceTypeModule } from '../distancetype/distancetype.module';
@@ -15,7 +16,7 @@ import { AuthModule } from 'src/auth/auth.module';
     // FeatureModule, // Uncomment if FeatureService needed for validation
     // DistanceTypeModule, // Uncomment if DistanceTypeService needed for validation
   ],
-  controllers: [HotelController],
+  controllers: [HotelController, HotelUserController],
   providers: [HotelService],
 })
 export class HotelModule {}

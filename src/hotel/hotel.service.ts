@@ -8,6 +8,7 @@ import { Model, Types } from 'mongoose';
 import { Hotel, HotelDocument } from '../common/schemas/Hotel.schema';
 import { CreateHotelDto } from './dto/create-hotel.dto';
 import { UpdateHotelDto } from './dto/update-hotel.dto';
+import { FilterHotelDto } from './dto/filter-hotel.dto';
 import slugify from 'slugify';
 import generalPaginate, { queryType } from 'src/common/utils/general-paginate';
 // Import related services if validation is needed
@@ -23,6 +24,10 @@ export class HotelService {
   async dummyData() {
     const refData = await this.hotelModel.findById('681c7584b512c1249196b08f');
 
+    await this.hotelModel.deleteMany({
+      _id: { $ne: '681c7584b512c1249196b08f' },
+    });
+
     //Create same 20 data with name Hotel 1 Hotel 2... and coordinates changing like from 45 to 44, 44 to 43, they need to be close to each other
     const hotels = [];
     for (let i = 1; i <= 100; i++) {
@@ -36,7 +41,10 @@ export class HotelService {
         },
         location: {
           type: 'Point',
-          coordinates: [45 - i, 40],
+          coordinates: [
+            45 - i * 0.005 + (Math.random() * 0.002 - 0.001),
+            40 + i * 0.005 + (Math.random() * 0.002 - 0.001),
+          ],
         },
       };
       hotels.push(hotel);
@@ -191,6 +199,157 @@ export class HotelService {
       throw new NotFoundException(`Hotel with ID ${id} not found`);
     }
     return { deleted: true };
+  }
+
+  async filterHotels(filterDto: FilterHotelDto): Promise<Hotel[]> {
+    const query: any = {};
+
+    // Apply basic filters
+    if (filterDto.slug) {
+      query.slug = filterDto.slug;
+    }
+
+    if (filterDto.title) {
+      Object.entries(filterDto.title).forEach(([lang, value]) => {
+        query[`title.${lang}`] = { $regex: value, $options: 'i' };
+      });
+    }
+
+    if (filterDto.featureIds && filterDto.featureIds.length > 0) {
+      query.featureIds = {
+        $all: filterDto.featureIds.map((id) => new Types.ObjectId(id)),
+      };
+    }
+
+    // Range filters
+    if (
+      filterDto.minRoomCount !== undefined ||
+      filterDto.maxRoomCount !== undefined
+    ) {
+      query.roomCount = {};
+      if (filterDto.minRoomCount !== undefined) {
+        query.roomCount.$gte = filterDto.minRoomCount;
+      }
+      if (filterDto.maxRoomCount !== undefined) {
+        query.roomCount.$lte = filterDto.maxRoomCount;
+      }
+    }
+
+    if (
+      filterDto.minBathroomCount !== undefined ||
+      filterDto.maxBathroomCount !== undefined
+    ) {
+      query.bathroomCount = {};
+      if (filterDto.minBathroomCount !== undefined) {
+        query.bathroomCount.$gte = filterDto.minBathroomCount;
+      }
+      if (filterDto.maxBathroomCount !== undefined) {
+        query.bathroomCount.$lte = filterDto.maxBathroomCount;
+      }
+    }
+
+    if (
+      filterDto.minBedRoomCount !== undefined ||
+      filterDto.maxBedRoomCount !== undefined
+    ) {
+      query.bedRoomCount = {};
+      if (filterDto.minBedRoomCount !== undefined) {
+        query.bedRoomCount.$gte = filterDto.minBedRoomCount;
+      }
+      if (filterDto.maxBedRoomCount !== undefined) {
+        query.bedRoomCount.$lte = filterDto.maxBedRoomCount;
+      }
+    }
+
+    if (
+      filterDto.minTotalSize !== undefined ||
+      filterDto.maxTotalSize !== undefined
+    ) {
+      query.totalSize = {};
+      if (filterDto.minTotalSize !== undefined) {
+        query.totalSize.$gte = filterDto.minTotalSize;
+      }
+      if (filterDto.maxTotalSize !== undefined) {
+        query.totalSize.$lte = filterDto.maxTotalSize;
+      }
+    }
+
+    if (
+      filterDto.minBuildYear !== undefined ||
+      filterDto.maxBuildYear !== undefined
+    ) {
+      query.buildYear = {};
+      if (filterDto.minBuildYear !== undefined) {
+        query.buildYear.$gte = filterDto.minBuildYear;
+      }
+      if (filterDto.maxBuildYear !== undefined) {
+        query.buildYear.$lte = filterDto.maxBuildYear;
+      }
+    }
+
+    // Price filter with currency
+    if (filterDto.minPrice !== undefined || filterDto.maxPrice !== undefined) {
+      const priceFilter: any = {};
+
+      if (filterDto.currency) {
+        priceFilter['price.currency'] = filterDto.currency;
+      }
+
+      if (filterDto.minPrice !== undefined) {
+        priceFilter['price.amount'] = { $gte: filterDto.minPrice };
+      }
+
+      if (filterDto.maxPrice !== undefined) {
+        if (priceFilter['price.amount']) {
+          priceFilter['price.amount'].$lte = filterDto.maxPrice;
+        } else {
+          priceFilter['price.amount'] = { $lte: filterDto.maxPrice };
+        }
+      }
+
+      query.$or = [{ price: { $elemMatch: priceFilter } }];
+    }
+
+    // Listing type filter
+    if (filterDto.listingType) {
+      Object.entries({ en: filterDto.listingType }).forEach(([lang, value]) => {
+        query[`listingType.${lang}`] = { $regex: value, $options: 'i' };
+      });
+    }
+
+    // Geo filter
+    if (filterDto.coordinates && filterDto.maxDistance) {
+      query.location = {
+        $near: {
+          $geometry: {
+            type: 'Point',
+            coordinates: filterDto.coordinates,
+          },
+          $maxDistance: filterDto.maxDistance * 1000, // Convert km to meters
+        },
+      };
+    }
+
+    // Search functionality
+    if (filterDto.search) {
+      const searchRegex = { $regex: filterDto.search, $options: 'i' };
+      const searchQuery = {
+        $or: [
+          { 'title.en': searchRegex },
+          { 'title.tr': searchRegex },
+          { 'description.en': searchRegex },
+          { 'description.tr': searchRegex },
+          { 'address.en': searchRegex },
+          { 'address.tr': searchRegex },
+        ],
+      };
+
+      // Combine search with existing query
+      query.$and = query.$and || [];
+      query.$and.push(searchQuery);
+    }
+
+    return this.hotelModel.find(query).exec();
   }
 
   // --- Helper for Relation Validation (Example) ---
