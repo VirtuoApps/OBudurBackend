@@ -50,6 +50,15 @@ export class Hotel {
   @Prop({ type: MongooseSchema.Types.Map, of: String })
   address?: Map<string, string>;
 
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  city?: Map<string, string>;
+
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  country?: Map<string, string>;
+
+  @Prop({ type: Number })
+  floorCount?: number;
+
   @Prop({ type: [PriceSubSchema] })
   price?: PriceSubSchema[];
 

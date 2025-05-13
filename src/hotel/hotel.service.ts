@@ -26,6 +26,36 @@ export class HotelService {
   async dummyData() {
     const refData = await this.hotelModel.findById('681c7584b512c1249196b08f');
 
+    const housingTypes = [
+      {
+        tr: 'Konut',
+        en: 'Housing',
+      },
+      {
+        tr: 'İş Yeri',
+        en: 'Office',
+      },
+      {
+        tr: 'Arsa',
+        en: 'Land',
+      },
+      {
+        tr: 'Ticaret',
+        en: 'Commercial',
+      },
+    ];
+
+    const listingTypes = [
+      {
+        tr: 'Satılık',
+        en: 'For Sale',
+      },
+      {
+        tr: 'Kiralık',
+        en: 'For Rent',
+      },
+    ];
+
     await this.hotelModel.deleteMany({
       _id: { $ne: '681c7584b512c1249196b08f' },
     });
@@ -41,10 +71,25 @@ export class HotelService {
         .slice(0, 10)
         .map((f) => f._id);
 
+      //Select random housing type
+      const housingType =
+        housingTypes[Math.floor(Math.random() * housingTypes.length)];
+
+      //Random listing type
+      const listingType =
+        listingTypes[Math.floor(Math.random() * listingTypes.length)];
+
       const hotel = {
         ...refData.toObject(),
         featureIds,
         _id: undefined,
+        housingType,
+        listingType,
+        roomCount: Math.floor(Math.random() * 5) + 1,
+        bathroomCount: Math.floor(Math.random() * 3) + 1,
+        balconyCount: Math.floor(Math.random() * 3) + 1,
+        bedRoomCount: Math.floor(Math.random() * 3) + 1,
+        floorCount: Math.floor(Math.random() * 3) + 1,
         slug: slugify(`Hotel ${i}`, { lower: true, strict: true }),
         title: {
           tr: `Hotel ${i}`,

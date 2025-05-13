@@ -77,6 +77,19 @@ export class UpdateHotelDto {
   @IsOptional()
   address?: Record<string, string>;
 
+  @IsObject()
+  @IsOptional()
+  city?: Record<string, string>;
+
+  @IsObject()
+  @IsOptional()
+  country?: Record<string, string>;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  floorCount?: number;
+
   @IsOptional()
   @ValidateNested()
   @Type(() => PriceUpdateDto)
