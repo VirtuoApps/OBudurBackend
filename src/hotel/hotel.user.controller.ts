@@ -6,6 +6,11 @@ import { FilterHotelDto } from './dto/filter-hotel.dto';
 export class HotelUserController {
   constructor(private readonly hotelService: HotelService) {}
 
+  @Get('/filter-options')
+  getFilterOptions() {
+    return this.hotelService.getFilterOptions();
+  }
+
   @Get()
   async findAll(@Query() filterDto: FilterHotelDto) {
     return this.hotelService.filterHotels(filterDto);

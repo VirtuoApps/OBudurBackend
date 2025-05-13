@@ -83,6 +83,10 @@ export class UpdateHotelDto {
 
   @IsObject()
   @IsOptional()
+  state?: Record<string, string>;
+
+  @IsObject()
+  @IsOptional()
   country?: Record<string, string>;
 
   @IsNumber()

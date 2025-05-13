@@ -72,6 +72,10 @@ export class CreateHotelDto {
 
   @IsObject()
   @IsOptional()
+  state?: Record<string, string>;
+
+  @IsObject()
+  @IsOptional()
   country?: Record<string, string>;
 
   @IsNumber()

@@ -98,8 +98,12 @@ export class HotelService {
         location: {
           type: 'Point',
           coordinates: [
-            45 - i * 0.005 + (Math.random() * 0.002 - 0.001),
-            40 + i * 0.005 + (Math.random() * 0.002 - 0.001),
+            refData.location.coordinates[0] -
+              i * 0.005 +
+              (Math.random() * 0.002 - 0.001),
+            refData.location.coordinates[1] +
+              i * 0.005 +
+              (Math.random() * 0.002 - 0.001),
           ],
         },
       };
@@ -107,6 +111,95 @@ export class HotelService {
     }
 
     return await this.hotelModel.insertMany(hotels);
+  }
+
+  async getFilterOptions() {
+    // We'll use a more direct approach to get all the map field values
+    // First, retrieve all documents with at least one of our fields
+    const hotels = await this.hotelModel
+      .find({
+        $or: [
+          { housingType: { $exists: true, $ne: null } },
+          { floorType: { $exists: true, $ne: null } },
+          { city: { $exists: true, $ne: null } },
+          { country: { $exists: true, $ne: null } },
+          { roomAsText: { $exists: true, $ne: null } },
+        ],
+      })
+      .lean();
+
+    // Initialize collections for unique values
+    const housingTypes = new Map();
+    const floorTypes = new Map();
+    const cities = new Map();
+    const countries = new Map();
+    const roomAsTextSet = new Set();
+    const countryToCities = new Map();
+
+    // Process each hotel to extract the values
+    hotels.forEach((hotel) => {
+      // Process housing type
+      if (hotel.housingType) {
+        const key = JSON.stringify(hotel.housingType);
+        housingTypes.set(key, hotel.housingType);
+      }
+
+      // Process floor type
+      if (hotel.floorType) {
+        const key = JSON.stringify(hotel.floorType);
+        floorTypes.set(key, hotel.floorType);
+      }
+
+      // Process city and country together for locations mapping
+      if (hotel.city && hotel.country) {
+        const cityKey = JSON.stringify(hotel.city);
+        const countryKey = JSON.stringify(hotel.country);
+
+        cities.set(cityKey, hotel.city);
+        countries.set(countryKey, hotel.country);
+
+        // Add city to country's list
+        if (!countryToCities.has(countryKey)) {
+          countryToCities.set(countryKey, new Map());
+        }
+        countryToCities.get(countryKey).set(cityKey, hotel.city);
+      } else {
+        // Process city and country separately if one is missing
+        if (hotel.city) {
+          const cityKey = JSON.stringify(hotel.city);
+          cities.set(cityKey, hotel.city);
+        }
+
+        if (hotel.country) {
+          const countryKey = JSON.stringify(hotel.country);
+          countries.set(countryKey, hotel.country);
+        }
+      }
+
+      // Process roomAsText
+      if (hotel.roomAsText) {
+        roomAsTextSet.add(hotel.roomAsText);
+      }
+    });
+
+    // Build locations array
+    const locations = [];
+    countryToCities.forEach((citiesMap, countryKey) => {
+      locations.push({
+        country: countries.get(countryKey),
+        cities: Array.from(citiesMap.values()),
+      });
+    });
+
+    // Return the collected unique values
+    return {
+      city: Array.from(cities.values()),
+      country: Array.from(countries.values()),
+      housingType: Array.from(housingTypes.values()),
+      floorType: Array.from(floorTypes.values()),
+      roomAsText: Array.from(roomAsTextSet),
+      locations,
+    };
   }
 
   async create(createHotelDto: CreateHotelDto): Promise<Hotel> {
