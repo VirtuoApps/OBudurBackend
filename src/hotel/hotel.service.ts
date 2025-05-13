@@ -11,6 +11,7 @@ import { UpdateHotelDto } from './dto/update-hotel.dto';
 import { FilterHotelDto } from './dto/filter-hotel.dto';
 import slugify from 'slugify';
 import generalPaginate, { queryType } from 'src/common/utils/general-paginate';
+import { Feature, FeatureDocument } from 'src/common/schemas/Feature.schema';
 // Import related services if validation is needed
 // import { FeatureService } from '../feature/feature.service';
 // import { DistanceTypeService } from '../distancetype/distancetype.service';
@@ -19,6 +20,7 @@ import generalPaginate, { queryType } from 'src/common/utils/general-paginate';
 export class HotelService {
   constructor(
     @InjectModel(Hotel.name) private hotelModel: Model<HotelDocument>, // Inject related services if needed for validation // private readonly featureService: FeatureService, // private readonly distanceTypeService: DistanceTypeService,
+    @InjectModel(Feature.name) private featureModel: Model<FeatureDocument>,
   ) {}
 
   async dummyData() {
@@ -28,11 +30,20 @@ export class HotelService {
       _id: { $ne: '681c7584b512c1249196b08f' },
     });
 
+    const allFeatures = await this.featureModel.find({});
+
     //Create same 20 data with name Hotel 1 Hotel 2... and coordinates changing like from 45 to 44, 44 to 43, they need to be close to each other
     const hotels = [];
     for (let i = 1; i <= 100; i++) {
+      //Give random 10 featureIds
+      const featureIds = allFeatures
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 10)
+        .map((f) => f._id);
+
       const hotel = {
         ...refData.toObject(),
+        featureIds,
         _id: undefined,
         slug: slugify(`Hotel ${i}`, { lower: true, strict: true }),
         title: {
