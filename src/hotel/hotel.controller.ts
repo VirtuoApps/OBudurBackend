@@ -21,6 +21,11 @@ import { queryType } from 'src/common/utils/general-paginate';
 export class HotelController {
   constructor(private readonly hotelService: HotelService) {}
 
+  @Post('/dummy-data')
+  dummyData() {
+    return this.hotelService.dummyData();
+  }
+
   @Post()
   create(@Body(ValidationPipe) createHotelDto: CreateHotelDto) {
     // Enable forbidNonWhitelisted in ValidationPipe later if needed

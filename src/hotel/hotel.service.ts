@@ -20,6 +20,31 @@ export class HotelService {
     @InjectModel(Hotel.name) private hotelModel: Model<HotelDocument>, // Inject related services if needed for validation // private readonly featureService: FeatureService, // private readonly distanceTypeService: DistanceTypeService,
   ) {}
 
+  async dummyData() {
+    const refData = await this.hotelModel.findById('681c7584b512c1249196b08f');
+
+    //Create same 20 data with name Hotel 1 Hotel 2... and coordinates changing like from 45 to 44, 44 to 43, they need to be close to each other
+    const hotels = [];
+    for (let i = 1; i <= 100; i++) {
+      const hotel = {
+        ...refData.toObject(),
+        _id: undefined,
+        slug: slugify(`Hotel ${i}`, { lower: true, strict: true }),
+        title: {
+          tr: `Hotel ${i}`,
+          en: `Hotel ${i}`,
+        },
+        location: {
+          type: 'Point',
+          coordinates: [45 - i, 40],
+        },
+      };
+      hotels.push(hotel);
+    }
+
+    return await this.hotelModel.insertMany(hotels);
+  }
+
   async create(createHotelDto: CreateHotelDto): Promise<Hotel> {
     // TODO: Add validation if featureIds and distanceTypeIds exist in their respective collections
     // Requires injecting FeatureService and DistanceTypeService

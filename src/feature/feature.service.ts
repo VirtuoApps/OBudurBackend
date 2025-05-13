@@ -13,6 +13,10 @@ export class FeatureService {
     @InjectModel(Feature.name) private featureModel: Model<FeatureDocument>,
   ) {}
 
+  async getAllGeneralFeatures() {
+    return await this.featureModel.find({ featureType: 'general' }).exec();
+  }
+
   async allOptions() {
     return await this.featureModel.find().exec();
   }
