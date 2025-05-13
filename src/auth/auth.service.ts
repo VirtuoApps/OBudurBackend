@@ -66,7 +66,7 @@ export class AuthService {
    * @throws BadRequestException if email already exists
    */
   async register(registerDto: RegisterDto) {
-    const { email, password } = registerDto;
+    const { email, password, firstName, lastName } = registerDto;
 
     const existsUser = await this.users.findOne({ email });
 
@@ -89,6 +89,8 @@ export class AuthService {
 
     const newUser = await this.users.create({
       email,
+      firstName,
+      lastName,
       password: hashedPassword,
       createdAt: new Date(),
       emailVerifyCode: generatedSixDigitCode,
@@ -259,20 +261,20 @@ export class AuthService {
       });
     }
 
-    if (user.forgotPasswordSendDate) {
-      //Check is 10 minutes passed
-      const dateNow = new Date();
-      const diff = dateNow.getTime() - user.forgotPasswordSendDate.getTime();
+    // if (user.forgotPasswordSendDate) {
+    //   //Check is 10 minutes passed
+    //   const dateNow = new Date();
+    //   const diff = dateNow.getTime() - user.forgotPasswordSendDate.getTime();
 
-      if (diff < 600000) {
-        throw new BadRequestException({
-          errorCode: errorCodes.FORGOT_PASSWORD_CODE_ALREADY_SENT,
-          message:
-            'Şifre sıfırlama talebini her 10 dakikada bir gönderebilirsiniz',
-          statusCode: 400,
-        });
-      }
-    }
+    //   if (diff < 600000) {
+    //     throw new BadRequestException({
+    //       errorCode: errorCodes.FORGOT_PASSWORD_CODE_ALREADY_SENT,
+    //       message:
+    //         'Şifre sıfırlama talebini her 10 dakikada bir gönderebilirsiniz',
+    //       statusCode: 400,
+    //     });
+    //   }
+    // }
 
     const generatedSixDigitCode = Math.floor(100000 + Math.random() * 900000);
 
