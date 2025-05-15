@@ -6,6 +6,10 @@ import { HotelService } from './hotel.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { HotelUserController } from './hotel.user.controller';
 import { Feature, FeatureSchema } from 'src/common/schemas/Feature.schema';
+import {
+  DistanceType,
+  DistanceTypeSchema,
+} from 'src/common/schemas/DistanceType.schema';
 // Import related modules if needed for validation (e.g., check if FeatureIds/DistanceTypeIds exist)
 // import { FeatureModule } from '../feature/feature.module';
 // import { DistanceTypeModule } from '../distancetype/distancetype.module';
@@ -16,6 +20,10 @@ import { Feature, FeatureSchema } from 'src/common/schemas/Feature.schema';
     MongooseModule.forFeature([
       { name: Hotel.name, schema: HotelSchema },
       { name: Feature.name, schema: FeatureSchema },
+      {
+        name: DistanceType.name,
+        schema: DistanceTypeSchema,
+      },
     ]),
     // FeatureModule, // Uncomment if FeatureService needed for validation
     // DistanceTypeModule, // Uncomment if DistanceTypeService needed for validation

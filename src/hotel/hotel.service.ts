@@ -12,6 +12,10 @@ import { FilterHotelDto } from './dto/filter-hotel.dto';
 import slugify from 'slugify';
 import generalPaginate, { queryType } from 'src/common/utils/general-paginate';
 import { Feature, FeatureDocument } from 'src/common/schemas/Feature.schema';
+import {
+  DistanceType,
+  DistanceTypeDocument,
+} from 'src/common/schemas/DistanceType.schema';
 // Import related services if validation is needed
 // import { FeatureService } from '../feature/feature.service';
 // import { DistanceTypeService } from '../distancetype/distancetype.service';
@@ -21,7 +25,58 @@ export class HotelService {
   constructor(
     @InjectModel(Hotel.name) private hotelModel: Model<HotelDocument>, // Inject related services if needed for validation // private readonly featureService: FeatureService, // private readonly distanceTypeService: DistanceTypeService,
     @InjectModel(Feature.name) private featureModel: Model<FeatureDocument>,
+    @InjectModel(DistanceType.name)
+    private distanceTypeModel: Model<DistanceTypeDocument>,
   ) {}
+
+  async getHotelBySlug(slug: string) {
+    const hotel = await this.hotelModel.findOne({ slug });
+    if (!hotel) {
+      throw new NotFoundException(`Hotel with slug ${slug} not found`);
+    }
+
+    const generalFeatures = await this.featureModel.find({
+      featureType: 'general',
+      _id: { $in: hotel.featureIds },
+    });
+
+    const insideFeatures = await this.featureModel.find({
+      featureType: 'inside',
+      _id: { $in: hotel.featureIds },
+    });
+
+    const outsideFeatures = await this.featureModel.find({
+      featureType: 'outside',
+      _id: { $in: hotel.featureIds },
+    });
+
+    const allDistances = await this.distanceTypeModel.find({
+      _id: { $in: hotel.distances.map((d) => d.typeId) },
+    });
+
+    const populatedDistances = [];
+
+    hotel.distances.forEach((d) => {
+      const distance = allDistances.find((ad) => ad._id.equals(d.typeId));
+      if (distance) {
+        populatedDistances.push({
+          ...distance.toObject(),
+          name: distance.name,
+          value: d.value,
+        });
+      }
+    });
+
+    return {
+      hotelDetails: hotel,
+      populatedData: {
+        generalFeatures,
+        insideFeatures,
+        outsideFeatures,
+        distances: populatedDistances,
+      },
+    };
+  }
 
   async dummyData() {
     const refData = await this.hotelModel.findById('681c7584b512c1249196b08f');
@@ -132,9 +187,23 @@ export class HotelService {
           { country: { $exists: true, $ne: null } },
           { roomAsText: { $exists: true, $ne: null } },
           { state: { $exists: true, $ne: null } },
+          { roomCount: { $exists: true, $ne: null } },
+          { bathroomCount: { $exists: true, $ne: null } },
         ],
       })
       .lean();
+
+    const interiorFeatures = await this.featureModel.find({
+      featureType: 'inside',
+    });
+
+    const outsideFeatures = await this.featureModel.find({
+      featureType: 'outside',
+    });
+
+    const generalFeatures = await this.featureModel.find({
+      featureType: 'general',
+    });
 
     // Initialize collections for unique values
     const housingTypes = new Map();
@@ -143,6 +212,8 @@ export class HotelService {
     const uniqueCountries = new Map(); // Global list of unique countries
     const roomAsTextSet = new Set();
     const uniqueStates = new Map(); // Global list of unique states
+    const roomCountSet = new Set();
+    const bathroomCountSet = new Set();
 
     // Map to store country-specific details (cities and states)
     const countryDetailsMap = new Map<
@@ -170,6 +241,16 @@ export class HotelService {
       // Process roomAsText
       if (hotel.roomAsText && !roomAsTextSet.has(hotel.roomAsText)) {
         roomAsTextSet.add(hotel.roomAsText);
+      }
+
+      // Process roomCount
+      if (hotel.roomCount && !roomCountSet.has(hotel.roomCount)) {
+        roomCountSet.add(hotel.roomCount);
+      }
+
+      // Process bathroomCount
+      if (hotel.bathroomCount && !bathroomCountSet.has(hotel.bathroomCount)) {
+        bathroomCountSet.add(hotel.bathroomCount);
       }
 
       // Process global list of unique states
@@ -246,6 +327,16 @@ export class HotelService {
       });
     });
 
+    //Sort roomcount from lowest to highest
+    const sortedRoomCount = Array.from(roomCountSet).sort(
+      (a, b) => Number(a) - Number(b),
+    );
+
+    //Sort bathroomcount from lowest to highest
+    const sortedBathroomCount = Array.from(bathroomCountSet).sort(
+      (a, b) => Number(a) - Number(b),
+    );
+
     // Return the collected unique values
     return {
       city: Array.from(uniqueCities.values()),
@@ -255,6 +346,11 @@ export class HotelService {
       roomAsText: Array.from(roomAsTextSet),
       locations, // Now includes states per country
       state: Array.from(uniqueStates.values()), // Global list of unique states
+      roomCount: sortedRoomCount,
+      bathroomCount: sortedBathroomCount,
+      interiorFeatures: Array.from(interiorFeatures.values()),
+      outsideFeatures: Array.from(outsideFeatures.values()),
+      generalFeatures: Array.from(generalFeatures.values()),
     };
   }
 
