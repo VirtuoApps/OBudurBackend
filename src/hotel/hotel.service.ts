@@ -56,6 +56,8 @@ export class HotelService {
       },
     ];
 
+    const roomAsTextOptions = ['1+1', '2+1', '3+1', '4+1'];
+
     await this.hotelModel.deleteMany({
       _id: { $ne: '681c7584b512c1249196b08f' },
     });
@@ -79,12 +81,17 @@ export class HotelService {
       const listingType =
         listingTypes[Math.floor(Math.random() * listingTypes.length)];
 
+      //Random roomAsText
+      const roomAsText =
+        roomAsTextOptions[Math.floor(Math.random() * roomAsTextOptions.length)];
+
       const hotel = {
         ...refData.toObject(),
         featureIds,
         _id: undefined,
         housingType,
         listingType,
+        roomAsText,
         roomCount: Math.floor(Math.random() * 5) + 1,
         bathroomCount: Math.floor(Math.random() * 3) + 1,
         balconyCount: Math.floor(Math.random() * 3) + 1,
@@ -124,6 +131,7 @@ export class HotelService {
           { city: { $exists: true, $ne: null } },
           { country: { $exists: true, $ne: null } },
           { roomAsText: { $exists: true, $ne: null } },
+          { state: { $exists: true, $ne: null } },
         ],
       })
       .lean();
@@ -131,74 +139,122 @@ export class HotelService {
     // Initialize collections for unique values
     const housingTypes = new Map();
     const floorTypes = new Map();
-    const cities = new Map();
-    const countries = new Map();
+    const uniqueCities = new Map(); // Global list of unique cities
+    const uniqueCountries = new Map(); // Global list of unique countries
     const roomAsTextSet = new Set();
-    const countryToCities = new Map();
+    const uniqueStates = new Map(); // Global list of unique states
+
+    // Map to store country-specific details (cities and states)
+    const countryDetailsMap = new Map<
+      string,
+      { countryObj: any; cities: Map<string, any>; states: Map<string, any> }
+    >();
 
     // Process each hotel to extract the values
     hotels.forEach((hotel) => {
       // Process housing type
-      if (hotel.housingType) {
+      if (
+        hotel.housingType &&
+        !housingTypes.has(JSON.stringify(hotel.housingType))
+      ) {
         const key = JSON.stringify(hotel.housingType);
         housingTypes.set(key, hotel.housingType);
       }
 
       // Process floor type
-      if (hotel.floorType) {
+      if (hotel.floorType && !floorTypes.has(JSON.stringify(hotel.floorType))) {
         const key = JSON.stringify(hotel.floorType);
         floorTypes.set(key, hotel.floorType);
       }
 
-      // Process city and country together for locations mapping
-      if (hotel.city && hotel.country) {
-        const cityKey = JSON.stringify(hotel.city);
-        const countryKey = JSON.stringify(hotel.country);
+      // Process roomAsText
+      if (hotel.roomAsText && !roomAsTextSet.has(hotel.roomAsText)) {
+        roomAsTextSet.add(hotel.roomAsText);
+      }
 
-        cities.set(cityKey, hotel.city);
-        countries.set(countryKey, hotel.country);
-
-        // Add city to country's list
-        if (!countryToCities.has(countryKey)) {
-          countryToCities.set(countryKey, new Map());
-        }
-        countryToCities.get(countryKey).set(cityKey, hotel.city);
-      } else {
-        // Process city and country separately if one is missing
-        if (hotel.city) {
-          const cityKey = JSON.stringify(hotel.city);
-          cities.set(cityKey, hotel.city);
-        }
-
-        if (hotel.country) {
-          const countryKey = JSON.stringify(hotel.country);
-          countries.set(countryKey, hotel.country);
+      // Process global list of unique states
+      if (hotel.state) {
+        const stateKey = JSON.stringify(hotel.state);
+        if (!uniqueStates.has(stateKey)) {
+          uniqueStates.set(stateKey, {
+            ...hotel.state,
+            cityOfTheState: hotel.city,
+            countryOfTheState: hotel.country,
+          });
         }
       }
 
-      // Process roomAsText
-      if (hotel.roomAsText) {
-        roomAsTextSet.add(hotel.roomAsText);
+      // Process country, city, and state for structured locations
+      if (hotel.country) {
+        const countryKey = JSON.stringify(hotel.country);
+
+        // Populate global list of unique countries
+        if (!uniqueCountries.has(countryKey)) {
+          uniqueCountries.set(countryKey, hotel.country);
+        }
+
+        // Ensure country entry exists in countryDetailsMap
+        if (!countryDetailsMap.has(countryKey)) {
+          countryDetailsMap.set(countryKey, {
+            countryObj: hotel.country,
+            cities: new Map(),
+            states: new Map(),
+          });
+        }
+        const countryEntry = countryDetailsMap.get(countryKey)!;
+
+        // Process city for this country
+        if (hotel.city) {
+          const cityKey = JSON.stringify(hotel.city);
+          // Populate global list of unique cities
+          if (!uniqueCities.has(cityKey)) {
+            uniqueCities.set(cityKey, hotel.city);
+          }
+          // Add city to the current country's cities list if not already present
+          if (!countryEntry.cities.has(cityKey)) {
+            countryEntry.cities.set(cityKey, hotel.city);
+          }
+        }
+
+        // Process state for this country
+        if (hotel.state) {
+          const stateKey = JSON.stringify(hotel.state);
+          // Add state to the current country's states list if not already present
+          if (!countryEntry.states.has(stateKey)) {
+            countryEntry.states.set(stateKey, hotel.state);
+          }
+        }
+      } else {
+        // If hotel has no country, but has a city, add to global uniqueCities list
+        if (hotel.city) {
+          const cityKey = JSON.stringify(hotel.city);
+          if (!uniqueCities.has(cityKey)) {
+            uniqueCities.set(cityKey, hotel.city);
+          }
+        }
+        // hotel.state is already handled for uniqueStates if it exists
       }
     });
 
     // Build locations array
     const locations = [];
-    countryToCities.forEach((citiesMap, countryKey) => {
+    countryDetailsMap.forEach((details) => {
       locations.push({
-        country: countries.get(countryKey),
-        cities: Array.from(citiesMap.values()),
+        country: details.countryObj,
+        cities: Array.from(details.cities.values()),
+        states: Array.from(details.states.values()), // Added states here
       });
     });
 
     // Return the collected unique values
     return {
-      city: Array.from(cities.values()),
-      country: Array.from(countries.values()),
+      city: Array.from(uniqueCities.values()),
+      country: Array.from(uniqueCountries.values()),
       housingType: Array.from(housingTypes.values()),
       floorType: Array.from(floorTypes.values()),
       roomAsText: Array.from(roomAsTextSet),
-      locations,
+      locations, // Now includes states per country
+      state: Array.from(uniqueStates.values()), // Global list of unique states
     };
   }
 
