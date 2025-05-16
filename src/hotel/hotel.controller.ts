@@ -27,6 +27,11 @@ export class HotelController {
     return this.hotelService.dummyData();
   }
 
+  @Get('/mine')
+  getMineHotels(@UserId() userId: string) {
+    return this.hotelService.getMineHotels(userId);
+  }
+
   @Post()
   create(
     @Body(ValidationPipe) createHotelDto: CreateHotelDto,

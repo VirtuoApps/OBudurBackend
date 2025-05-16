@@ -78,6 +78,11 @@ export class HotelService {
     };
   }
 
+  async getMineHotels(userId: string) {
+    const hotels = await this.hotelModel.find({ managerId: userId });
+    return hotels;
+  }
+
   async dummyData() {
     const refData = await this.hotelModel.findById('681c7584b512c1249196b08f');
 
