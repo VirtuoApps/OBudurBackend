@@ -14,6 +14,7 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateMeDto } from './dto/update-me.dto';
 import { queryType } from '../common/utils/general-paginate'; // Assuming queryType is exported from here
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { AuthGuard } from '@nestjs/passport';
@@ -21,6 +22,13 @@ import { UserId } from 'src/common/decorators/user-id.decarator';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Patch('me')
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+  updateMe(@UserId() userId: string, @Body() updateMeDto: UpdateMeDto) {
+    return this.usersService.update(userId, updateMeDto);
+  }
 
   @Get('me')
   @UseGuards(AuthGuard('jwt'))
