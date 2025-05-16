@@ -354,7 +354,7 @@ export class HotelService {
     };
   }
 
-  async create(createHotelDto: CreateHotelDto): Promise<Hotel> {
+  async create(createHotelDto: CreateHotelDto, userId: string): Promise<Hotel> {
     // TODO: Add validation if featureIds and distanceTypeIds exist in their respective collections
     // Requires injecting FeatureService and DistanceTypeService
     // await this.validateRelations(createHotelDto.featureIds, createHotelDto.distances?.map(d => d.typeId));
@@ -401,7 +401,10 @@ export class HotelService {
     };
 
     try {
-      const createdHotel = new this.hotelModel(hotelData);
+      const createdHotel = new this.hotelModel({
+        ...hotelData,
+        managerId: new Types.ObjectId(userId),
+      });
       return await createdHotel.save();
     } catch (error) {
       // Handle potential duplicate slug error etc.

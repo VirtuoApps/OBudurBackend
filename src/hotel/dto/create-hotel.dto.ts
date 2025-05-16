@@ -12,6 +12,7 @@ import {
   ArrayNotEmpty,
   ArrayMinSize,
   MaxLength,
+  IsBoolean,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -176,4 +177,8 @@ export class CreateHotelDto {
   @IsArray()
   @IsOptional() // How to validate Mixed type? Allow any array for now.
   documents?: any[];
+
+  @IsBoolean()
+  @IsOptional()
+  isPublished?: boolean;
 }

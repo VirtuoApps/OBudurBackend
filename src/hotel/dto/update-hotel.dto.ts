@@ -12,6 +12,7 @@ import {
   ArrayMinSize,
   ArrayNotEmpty,
   MaxLength,
+  IsBoolean,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -191,4 +192,8 @@ export class UpdateHotelDto {
   @IsArray()
   @IsOptional()
   documents?: any[];
+
+  @IsBoolean()
+  @IsOptional()
+  isPublished?: boolean;
 }

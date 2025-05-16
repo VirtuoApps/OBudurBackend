@@ -124,6 +124,12 @@ export class Hotel {
 
   @Prop({ type: [MongooseSchema.Types.Mixed] }) // For documents
   documents?: any[];
+
+  @Prop({ type: MongooseSchema.Types.ObjectId })
+  managerId?: Types.ObjectId;
+
+  @Prop({ type: Boolean, default: false })
+  isPublished?: boolean;
 }
 
 export const HotelSchema = SchemaFactory.createForClass(Hotel);

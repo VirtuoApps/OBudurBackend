@@ -16,6 +16,18 @@ import errorCodes from '../common/errorCodes/errorCodes';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
+  async getMe(userId: string): Promise<User> {
+    const user = await this.userModel.findById(userId).exec();
+    if (!user) {
+      throw new NotFoundException({
+        errorCode: errorCodes.USER_NOT_FOUND,
+        message: `User with ID ${userId} not found`,
+        statusCode: 404,
+      });
+    }
+    return user;
+  }
+
   async create(createUserDto: CreateUserDto): Promise<User> {
     const existingUser = await this.userModel
       .findOne({ email: createUserDto.email })

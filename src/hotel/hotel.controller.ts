@@ -16,6 +16,7 @@ import { UpdateHotelDto } from './dto/update-hotel.dto';
 import { AdminGuard } from '../common/guards/admin.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { queryType } from 'src/common/utils/general-paginate';
+import { UserId } from 'src/common/decorators/user-id.decarator';
 @Controller('admin/hotels')
 @UseGuards(AuthGuard('jwt'), AdminGuard)
 export class HotelController {
@@ -27,9 +28,12 @@ export class HotelController {
   }
 
   @Post()
-  create(@Body(ValidationPipe) createHotelDto: CreateHotelDto) {
+  create(
+    @Body(ValidationPipe) createHotelDto: CreateHotelDto,
+    @UserId() userId: string,
+  ) {
     // Enable forbidNonWhitelisted in ValidationPipe later if needed
-    return this.hotelService.create(createHotelDto);
+    return this.hotelService.create(createHotelDto, userId);
   }
 
   @Get()
