@@ -38,6 +38,13 @@ export class Hotel {
   @Prop({ type: Number, required: true })
   no: number;
 
+  @Prop({
+    type: String,
+    required: true,
+    enum: ['west', 'east', 'south', 'north'],
+  })
+  face: 'west' | 'east' | 'south' | 'north';
+
   @Prop({ type: String, unique: true, required: true })
   slug: string;
 
@@ -51,13 +58,25 @@ export class Hotel {
   address?: Map<string, string>;
 
   @Prop({ type: MongooseSchema.Types.Map, of: String })
+  country?: Map<string, string>;
+
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
   city?: Map<string, string>;
 
   @Prop({ type: MongooseSchema.Types.Map, of: String })
   state?: Map<string, string>;
 
   @Prop({ type: MongooseSchema.Types.Map, of: String })
-  country?: Map<string, string>;
+  street?: Map<string, string>;
+
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  buildingNo?: Map<string, string>;
+
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  apartmentNo?: Map<string, string>;
+
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  postalCode?: Map<string, string>;
 
   @Prop({ type: Number })
   floorCount?: number;

@@ -6,14 +6,14 @@ import { FilterHotelDto } from './dto/filter-hotel.dto';
 export class HotelUserController {
   constructor(private readonly hotelService: HotelService) {}
 
-  @Get('/:slug')
-  getHotelBySlug(@Param('slug') slug: string) {
-    return this.hotelService.getHotelBySlug(slug);
-  }
-
   @Get('/filter-options')
   getFilterOptions() {
     return this.hotelService.getFilterOptions();
+  }
+
+  @Get('/:slug')
+  getHotelBySlug(@Param('slug') slug: string) {
+    return this.hotelService.getHotelBySlug(slug);
   }
 
   @Get()

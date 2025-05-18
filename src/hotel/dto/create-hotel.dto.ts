@@ -181,4 +181,24 @@ export class CreateHotelDto {
   @IsBoolean()
   @IsOptional()
   isPublished?: boolean;
+
+  @IsString()
+  @IsOptional()
+  face?: 'west' | 'east' | 'south' | 'north';
+
+  @IsString()
+  @IsOptional()
+  street?: string;
+
+  @IsString()
+  @IsOptional()
+  buildingNo?: string;
+
+  @IsString()
+  @IsOptional()
+  apartmentNo?: string;
+
+  @IsString()
+  @IsOptional()
+  postalCode?: string;
 }
