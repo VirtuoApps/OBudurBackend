@@ -84,7 +84,7 @@ export class HotelService {
   }
 
   async dummyData() {
-    const refData = await this.hotelModel.findById('681c7584b512c1249196b08f');
+    const refData = await this.hotelModel.findById('68298fced3d03375075bc4d7');
 
     const housingTypes = [
       {
@@ -119,7 +119,7 @@ export class HotelService {
     const roomAsTextOptions = ['1+1', '2+1', '3+1', '4+1'];
 
     await this.hotelModel.deleteMany({
-      _id: { $ne: '681c7584b512c1249196b08f' },
+      _id: { $ne: '68298fced3d03375075bc4d7' },
     });
 
     const allFeatures = await this.featureModel.find({});
