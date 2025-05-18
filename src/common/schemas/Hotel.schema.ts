@@ -69,14 +69,14 @@ export class Hotel {
   @Prop({ type: MongooseSchema.Types.Map, of: String })
   street?: Map<string, string>;
 
-  @Prop({ type: MongooseSchema.Types.Map, of: String })
-  buildingNo?: Map<string, string>;
+  @Prop({ type: String })
+  buildingNo?: string;
 
-  @Prop({ type: MongooseSchema.Types.Map, of: String })
-  apartmentNo?: Map<string, string>;
+  @Prop({ type: String, of: String })
+  apartmentNo?: string;
 
-  @Prop({ type: MongooseSchema.Types.Map, of: String })
-  postalCode?: Map<string, string>;
+  @Prop({ type: String })
+  postalCode?: string;
 
   @Prop({ type: Number })
   floorCount?: number;

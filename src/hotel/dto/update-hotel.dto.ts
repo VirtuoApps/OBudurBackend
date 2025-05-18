@@ -203,7 +203,7 @@ export class UpdateHotelDto {
 
   @IsString()
   @IsOptional()
-  street?: string;
+  street?: Record<string, string>;
 
   @IsString()
   @IsOptional()

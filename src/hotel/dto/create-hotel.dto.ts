@@ -186,9 +186,9 @@ export class CreateHotelDto {
   @IsOptional()
   face?: 'west' | 'east' | 'south' | 'north';
 
-  @IsString()
+  @IsObject()
   @IsOptional()
-  street?: string;
+  street?: Record<string, string>;
 
   @IsString()
   @IsOptional()
