@@ -18,21 +18,23 @@ import { AuthGuard } from '@nestjs/passport';
 import { queryType } from 'src/common/utils/general-paginate';
 import { UserId } from 'src/common/decorators/user-id.decarator';
 @Controller('admin/hotels')
-@UseGuards(AuthGuard('jwt'), AdminGuard)
 export class HotelController {
   constructor(private readonly hotelService: HotelService) {}
 
   @Post('/dummy-data')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   dummyData() {
     return this.hotelService.dummyData();
   }
 
   @Get('/mine')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   getMineHotels(@UserId() userId: string) {
     return this.hotelService.getMineHotels(userId);
   }
 
   @Post()
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   create(
     @Body(ValidationPipe) createHotelDto: CreateHotelDto,
     @UserId() userId: string,
@@ -42,6 +44,7 @@ export class HotelController {
   }
 
   @Get()
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   findAll(@Query() queryParams: queryType) {
     // Placeholder for query params
     // Add filtering/pagination based on queryParams later
@@ -54,6 +57,7 @@ export class HotelController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   update(
     @Param('id') id: string,
     @Body(ValidationPipe) updateHotelDto: UpdateHotelDto,
@@ -62,6 +66,7 @@ export class HotelController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   remove(@Param('id') id: string) {
     return this.hotelService.remove(id);
   }

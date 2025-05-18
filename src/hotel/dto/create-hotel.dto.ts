@@ -201,4 +201,8 @@ export class CreateHotelDto {
   @IsString()
   @IsOptional()
   postalCode?: string;
+
+  @IsString()
+  @IsOptional()
+  video?: string;
 }

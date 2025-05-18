@@ -201,7 +201,7 @@ export class UpdateHotelDto {
   @IsOptional()
   face?: 'west' | 'east' | 'south' | 'north';
 
-  @IsString()
+  @IsObject()
   @IsOptional()
   street?: Record<string, string>;
 
@@ -216,4 +216,8 @@ export class UpdateHotelDto {
   @IsString()
   @IsOptional()
   postalCode?: string;
+
+  @IsString()
+  @IsOptional()
+  video?: string;
 }

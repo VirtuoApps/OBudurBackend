@@ -149,6 +149,9 @@ export class Hotel {
 
   @Prop({ type: Boolean, default: false })
   isPublished?: boolean;
+
+  @Prop({ type: String })
+  video?: string;
 }
 
 export const HotelSchema = SchemaFactory.createForClass(Hotel);
