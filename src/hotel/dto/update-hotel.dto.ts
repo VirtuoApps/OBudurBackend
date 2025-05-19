@@ -220,4 +220,8 @@ export class UpdateHotelDto {
   @IsString()
   @IsOptional()
   video?: string;
+
+  @IsString()
+  @IsOptional()
+  status?: string;
 }

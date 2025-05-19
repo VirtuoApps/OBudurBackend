@@ -152,6 +152,12 @@ export class Hotel {
 
   @Prop({ type: String })
   video?: string;
+
+  @Prop({
+    type: String,
+    enum: ['active', 'inactive', 'sold', 'stopped', 'optioned'],
+  })
+  status?: string;
 }
 
 export const HotelSchema = SchemaFactory.createForClass(Hotel);

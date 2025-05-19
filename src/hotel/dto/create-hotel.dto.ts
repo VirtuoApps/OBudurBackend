@@ -205,4 +205,8 @@ export class CreateHotelDto {
   @IsString()
   @IsOptional()
   video?: string;
+
+  @IsString()
+  @IsOptional()
+  status?: string;
 }
