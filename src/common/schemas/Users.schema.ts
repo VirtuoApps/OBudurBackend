@@ -37,7 +37,7 @@ export class User {
   forgotPasswordSendDate: Date;
 
   @Prop({ type: String, required: false, default: 'user' })
-  role: 'user' | 'admin';
+  role: 'user' | 'super-admin' | 'admin';
 
   @Prop({ type: String, required: false })
   profilePicture: string;

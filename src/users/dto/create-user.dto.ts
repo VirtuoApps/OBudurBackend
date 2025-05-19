@@ -30,8 +30,8 @@ export class CreateUserDto {
 
   @IsString()
   @IsOptional()
-  @IsIn(['user', 'admin'])
-  role?: 'user' | 'admin'; // Default is 'user' in schema
+  @IsIn(['user', 'admin', 'super-admin'])
+  role?: 'user' | 'admin' | 'super-admin'; // Default is 'user' in schema
 
   @IsString()
   @IsOptional()
