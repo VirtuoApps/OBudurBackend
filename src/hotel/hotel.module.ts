@@ -11,6 +11,10 @@ import {
   DistanceTypeSchema,
 } from 'src/common/schemas/DistanceType.schema';
 import { User, UserSchema } from 'src/common/schemas/Users.schema';
+import {
+  HotelMessages,
+  HotelMessagesSchema,
+} from 'src/common/schemas/HotelMessages.schema';
 // Import related modules if needed for validation (e.g., check if FeatureIds/DistanceTypeIds exist)
 // import { FeatureModule } from '../feature/feature.module';
 // import { DistanceTypeModule } from '../distancetype/distancetype.module';
@@ -26,6 +30,7 @@ import { User, UserSchema } from 'src/common/schemas/Users.schema';
         schema: DistanceTypeSchema,
       },
       { name: User.name, schema: UserSchema },
+      { name: HotelMessages.name, schema: HotelMessagesSchema },
     ]),
     // FeatureModule, // Uncomment if FeatureService needed for validation
     // DistanceTypeModule, // Uncomment if DistanceTypeService needed for validation

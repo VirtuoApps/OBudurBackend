@@ -17,6 +17,10 @@ import {
   DistanceTypeDocument,
 } from 'src/common/schemas/DistanceType.schema';
 import { User, UserDocument } from 'src/common/schemas/Users.schema';
+import {
+  HotelMessages,
+  HotelMessagesDocument,
+} from 'src/common/schemas/HotelMessages.schema';
 // Import related services if validation is needed
 // import { FeatureService } from '../feature/feature.service';
 // import { DistanceTypeService } from '../distancetype/distancetype.service';
@@ -29,6 +33,8 @@ export class HotelService {
     @InjectModel(DistanceType.name)
     private distanceTypeModel: Model<DistanceTypeDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(HotelMessages.name)
+    private hotelMessagesModel: Model<HotelMessagesDocument>,
   ) {}
 
   async getHotelBySlug(slug: string) {
@@ -83,18 +89,44 @@ export class HotelService {
     };
   }
 
-  async getMineHotels(userId: string) {
+  async getMineHotels(userId: string): Promise<Array<any>> {
     const user = await this.userModel.findById(userId);
 
-    if (user.role === 'super-admin') {
-      const hotels = await this.hotelModel.find({});
+    // Define query based on user role
+    const query = user.role === 'super-admin' ? {} : { managerId: userId };
 
-      return hotels;
-    } else {
-      const hotels = await this.hotelModel.find({ managerId: userId });
+    // Get hotels based on the query
+    const hotels = await this.hotelModel.find(query).lean();
 
-      return hotels;
+    if (hotels.length === 0) {
+      return [];
     }
+
+    // Get hotel IDs for message lookup
+    const hotelIds = hotels.map((h) => h._id);
+
+    // Get all messages first to ensure we're finding them
+    const allInitialMessages = await this.hotelMessagesModel.find({
+      hotelId: { $in: hotelIds },
+      isInitialMessage: true,
+    });
+
+    // Create a map to count messages per hotel
+    const messageCountMap = new Map();
+
+    allInitialMessages.forEach((message) => {
+      const hotelIdStr = message.hotelId.toString();
+      messageCountMap.set(
+        hotelIdStr,
+        (messageCountMap.get(hotelIdStr) || 0) + 1,
+      );
+    });
+
+    // Add message count to each hotel
+    return hotels.map((hotel) => ({
+      ...hotel,
+      totalMessageCount: messageCountMap.get(hotel._id.toString()) || 0,
+    }));
   }
 
   async dummyData() {
