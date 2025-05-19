@@ -13,6 +13,7 @@ import { FileSystemModule } from './file-system/file-system.module';
 import { CloudflareR2Module } from './cloudflare-r2/cloudflare-r2.module';
 import { UsersModule } from './users/users.module';
 import { HotelMessagesModule } from './hotel-messages/hotel-messages.module';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { HotelMessagesModule } from './hotel-messages/hotel-messages.module';
     FileSystemModule,
     UsersModule,
     HotelMessagesModule,
+    FavoritesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

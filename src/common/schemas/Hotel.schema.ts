@@ -156,6 +156,9 @@ export class Hotel {
   @Prop({ type: Number, default: 0 })
   viewCount?: number;
 
+  @Prop({ type: Number, default: 0 })
+  favoriteCount?: number;
+
   @Prop({
     type: String,
     enum: ['active', 'inactive', 'sold', 'stopped', 'optioned'],
