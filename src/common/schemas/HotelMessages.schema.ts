@@ -17,6 +17,9 @@ export class HotelMessages {
   @Prop({ type: Boolean, default: false })
   isInitialMessage: boolean;
 
+  @Prop({ type: Boolean, default: false })
+  iWantToSeeProperty: boolean;
+
   @Prop({ type: String, required: true })
   from: string;
 

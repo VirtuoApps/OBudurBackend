@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsBoolean } from 'class-validator';
 
 export class CreateInitialMessageDto {
   @IsString()
@@ -24,4 +24,8 @@ export class CreateInitialMessageDto {
   @IsString()
   @IsNotEmpty()
   email: string;
+
+  @IsBoolean()
+  @IsNotEmpty()
+  iWantToSeeProperty: boolean;
 }

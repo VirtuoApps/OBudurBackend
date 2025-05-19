@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Param } from '@nestjs/common';
 import { HotelMessagesService } from './hotel-messages.service';
 import { CreateInitialMessageDto } from './dto/create-initial-message.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -18,5 +18,14 @@ export class HotelMessagesController {
       createInitialMessageDto,
       userId,
     );
+  }
+
+  @Get('/hotels/:hotelId')
+  @UseGuards(AuthGuard('jwt'))
+  getExistsMessageOfHotel(
+    @Param('hotelId') hotelId: string,
+    @UserId() userId: string,
+  ) {
+    return this.hotelMessagesService.getExistsMessageOfHotel(hotelId, userId);
   }
 }
