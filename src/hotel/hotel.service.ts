@@ -16,6 +16,7 @@ import {
   DistanceType,
   DistanceTypeDocument,
 } from 'src/common/schemas/DistanceType.schema';
+import { User, UserDocument } from 'src/common/schemas/Users.schema';
 // Import related services if validation is needed
 // import { FeatureService } from '../feature/feature.service';
 // import { DistanceTypeService } from '../distancetype/distancetype.service';
@@ -27,6 +28,7 @@ export class HotelService {
     @InjectModel(Feature.name) private featureModel: Model<FeatureDocument>,
     @InjectModel(DistanceType.name)
     private distanceTypeModel: Model<DistanceTypeDocument>,
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
 
   async getHotelBySlug(slug: string) {
@@ -79,8 +81,17 @@ export class HotelService {
   }
 
   async getMineHotels(userId: string) {
-    const hotels = await this.hotelModel.find({ managerId: userId });
-    return hotels;
+    const user = await this.userModel.findById(userId);
+
+    if (user.role === 'super-admin') {
+      const hotels = await this.hotelModel.find({});
+
+      return hotels;
+    } else {
+      const hotels = await this.hotelModel.find({ managerId: userId });
+
+      return hotels;
+    }
   }
 
   async dummyData() {
