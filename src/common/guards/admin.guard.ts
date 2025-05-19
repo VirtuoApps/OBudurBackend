@@ -11,7 +11,12 @@ export class AdminGuard implements CanActivate {
 
     const user = req.user as User;
 
-    if (!user || !user.role || user.role !== 'admin') return false;
+    if (
+      !user ||
+      !user.role ||
+      (user.role !== 'admin' && user.role !== 'super-admin')
+    )
+      return false;
 
     return true;
   }
