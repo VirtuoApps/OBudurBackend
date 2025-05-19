@@ -522,7 +522,11 @@ export class HotelService {
   }
 
   async filterHotels(filterDto: FilterHotelDto): Promise<Hotel[]> {
-    const query: any = {};
+    const query: any = {
+      isPublished: {
+        $ne: false,
+      },
+    };
 
     // Apply basic filters
     if (filterDto.slug) {
