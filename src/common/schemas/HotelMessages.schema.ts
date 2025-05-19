@@ -32,6 +32,9 @@ export class HotelMessages {
   @Prop({ type: String, required: true })
   email: string;
 
+  @Prop({ type: Boolean, required: true, default: false })
+  isSeen: boolean;
+
   @Prop({ type: Date, required: true })
   createdAt: Date;
 
