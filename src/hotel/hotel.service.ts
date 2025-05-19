@@ -69,6 +69,8 @@ export class HotelService {
       }
     });
 
+    const manager = await this.userModel.findById(hotel.managerId);
+
     return {
       hotelDetails: hotel,
       populatedData: {
@@ -77,6 +79,7 @@ export class HotelService {
         outsideFeatures,
         distances: populatedDistances,
       },
+      manager,
     };
   }
 

@@ -19,6 +19,8 @@ export class User {
   lastName: string;
 
   @Prop({ type: String, required: false })
+  phoneNumber: string;
+  @Prop({ type: String, required: false })
   password: string;
 
   @Prop({ type: Boolean, required: true, default: false })
