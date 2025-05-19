@@ -37,6 +37,19 @@ export class HotelService {
     private hotelMessagesModel: Model<HotelMessagesDocument>,
   ) {}
 
+  async increaseViewCount(hotelId: string) {
+    const hotel = await this.hotelModel.findByIdAndUpdate(
+      hotelId,
+      {
+        $inc: { viewCount: 1 },
+      },
+      {
+        new: true,
+      },
+    );
+    return hotel;
+  }
+
   async getHotelBySlug(slug: string) {
     const hotel = await this.hotelModel.findOne({ slug });
     if (!hotel) {

@@ -1,10 +1,15 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { HotelService } from './hotel.service';
 import { FilterHotelDto } from './dto/filter-hotel.dto';
 
 @Controller('hotels')
 export class HotelUserController {
   constructor(private readonly hotelService: HotelService) {}
+
+  @Post('/:hotelId/increase-view-count')
+  increaseViewCount(@Param('hotelId') hotelId: string) {
+    return this.hotelService.increaseViewCount(hotelId);
+  }
 
   @Get('/filter-options')
   getFilterOptions() {

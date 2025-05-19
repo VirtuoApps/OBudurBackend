@@ -153,6 +153,9 @@ export class Hotel {
   @Prop({ type: String })
   video?: string;
 
+  @Prop({ type: Number, default: 0 })
+  viewCount?: number;
+
   @Prop({
     type: String,
     enum: ['active', 'inactive', 'sold', 'stopped', 'optioned'],
