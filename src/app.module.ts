@@ -14,6 +14,7 @@ import { CloudflareR2Module } from './cloudflare-r2/cloudflare-r2.module';
 import { UsersModule } from './users/users.module';
 import { HotelMessagesModule } from './hotel-messages/hotel-messages.module';
 import { FavoritesModule } from './favorites/favorites.module';
+import { MailDroppersModule } from './mail-droppers/mail-droppers.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { FavoritesModule } from './favorites/favorites.module';
     UsersModule,
     HotelMessagesModule,
     FavoritesModule,
+    MailDroppersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
