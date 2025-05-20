@@ -16,6 +16,7 @@ import { LoginDto } from './dto/login.dto';
 import { UserId } from 'src/common/decorators/user-id.decarator';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { UpdateMineAccountDto } from './dto/update-mine-account.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -25,6 +26,15 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   mine(@UserId() userId: string) {
     return this.authService.mine(userId);
+  }
+
+  @Patch('/mine')
+  @UseGuards(AuthGuard('jwt'))
+  updateMineAccount(
+    @UserId() userId: string,
+    @Body() updateMineAccountDto: UpdateMineAccountDto,
+  ) {
+    return this.authService.updateMineAccount(userId, updateMineAccountDto);
   }
 
   @Post('/register')

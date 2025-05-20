@@ -14,6 +14,7 @@ import { LoginDto } from './dto/login.dto';
 import { MailService } from 'src/mail/mail.service';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { UpdateMineAccountDto } from './dto/update-mine-account.dto';
 
 @Injectable()
 export class AuthService {
@@ -35,6 +36,61 @@ export class AuthService {
     }
 
     return user;
+  }
+
+  async updateMineAccount(
+    userId: string,
+    updateMineAccountDto: UpdateMineAccountDto,
+  ) {
+    const { email, password, firstName, lastName } = updateMineAccountDto;
+
+    const user = await this.users.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException({
+        errorCode: errorCodes.USER_NOT_FOUND,
+        message: 'Kullanıcı bulunamadı',
+        statusCode: 404,
+      });
+    }
+
+    const updateData: any = {};
+
+    if (firstName) updateData.firstName = firstName;
+    if (lastName) updateData.lastName = lastName;
+
+    if (email && email !== user.email) {
+      const emailExists = await this.users.findOne({
+        email,
+        _id: { $ne: userId },
+      });
+
+      if (emailExists) {
+        throw new BadRequestException({
+          errorCode: errorCodes.EMAIL_ALREADY_EXISTS,
+          message: 'E-Posta adresi zaten kullanılıyor',
+          statusCode: 400,
+        });
+      }
+
+      updateData.email = email;
+    }
+
+    if (password) {
+      updateData.password = await bcrypt.hash(password, 10);
+    }
+
+    const updatedUser = await this.users.findByIdAndUpdate(
+      userId,
+      { $set: updateData },
+      { new: true },
+    );
+
+    const tokens = this.generateTokens(updatedUser);
+
+    return {
+      accessToken: tokens.accessToken,
+    };
   }
 
   /**
