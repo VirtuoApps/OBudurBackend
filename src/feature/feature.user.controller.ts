@@ -9,4 +9,9 @@ export class FeatureUserController {
   getAllGeneralFeatures() {
     return this.featureService.getAllGeneralFeatures();
   }
+
+  @Get('/all-options')
+  getAllOptions() {
+    return this.featureService.allOptions();
+  }
 }
