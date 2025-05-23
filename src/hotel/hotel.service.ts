@@ -516,10 +516,6 @@ export class HotelService {
       };
     }
 
-    console.log({
-      extraQueries,
-    });
-
     // Consider adding pagination later
     return await generalPaginate({
       model: this.hotelModel,
