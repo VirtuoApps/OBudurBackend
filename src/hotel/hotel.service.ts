@@ -495,6 +495,16 @@ export class HotelService {
     return hotel;
   }
 
+  async disableConfirmHotel(hotelId: string) {
+    const hotel = await this.hotelModel.findById(hotelId);
+    if (!hotel) {
+      throw new NotFoundException(`Hotel with ID ${hotelId} not found`);
+    }
+    hotel.isConfirmedByAdmin = false;
+    await hotel.save();
+    return hotel;
+  }
+
   async findAll(
     query: queryType,
     extraFilters: {
@@ -513,6 +523,13 @@ export class HotelService {
         isConfirmedByAdmin: {
           $ne: true,
         },
+      };
+    }
+
+    if (extraFilters.isConfirmedByAdmin === true) {
+      extraQueries = {
+        ...extraQueries,
+        isConfirmedByAdmin: true,
       };
     }
 

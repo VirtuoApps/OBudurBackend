@@ -57,13 +57,29 @@ export class HotelController {
     return this.hotelService.confirmHotel(hotelId);
   }
 
+  @Post('/disable-confirm-hotel/:hotelId')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  disableConfirmHotel(@Param('hotelId') hotelId: string) {
+    return this.hotelService.disableConfirmHotel(hotelId);
+  }
+
   @Get('/not-confirmed')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  findAllNotConfirmed(@Query() queryParams: queryType) {
+    // Placeholder for query params
+    // Add filtering/pagination based on queryParams later
+    return this.hotelService.findAll(queryParams, {
+      isConfirmedByAdmin: false,
+    });
+  }
+
+  @Get('/confirmed')
   @UseGuards(AuthGuard('jwt'), AdminGuard)
   findAllConfirmed(@Query() queryParams: queryType) {
     // Placeholder for query params
     // Add filtering/pagination based on queryParams later
     return this.hotelService.findAll(queryParams, {
-      isConfirmedByAdmin: false,
+      isConfirmedByAdmin: true,
     });
   }
 
