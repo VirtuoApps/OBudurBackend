@@ -153,6 +153,9 @@ export class Hotel {
   @Prop({ type: String })
   video?: string;
 
+  @Prop({ type: Boolean, default: false })
+  isConfirmedByAdmin?: boolean;
+
   @Prop({ type: Number, default: 0 })
   viewCount?: number;
 

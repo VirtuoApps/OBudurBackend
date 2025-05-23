@@ -423,6 +423,8 @@ export class HotelService {
     // Requires injecting FeatureService and DistanceTypeService
     // await this.validateRelations(createHotelDto.featureIds, createHotelDto.distances?.map(d => d.typeId));
 
+    const manager = await this.userModel.findById(userId);
+
     let hotelNo = Math.floor(100000000 + Math.random() * 900000000).toString();
 
     let isExists = true;
@@ -467,6 +469,7 @@ export class HotelService {
     try {
       const createdHotel = new this.hotelModel({
         ...hotelData,
+        isConfirmedByAdmin: manager.role === 'super-admin' ? true : false,
         managerId: new Types.ObjectId(userId),
       });
       return await createdHotel.save();
