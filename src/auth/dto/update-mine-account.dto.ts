@@ -27,4 +27,10 @@ export class UpdateMineAccountDto {
   @IsString()
   @IsNotEmpty()
   lastName: string;
+
+  @IsString()
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  phoneNumber: string;
 }
