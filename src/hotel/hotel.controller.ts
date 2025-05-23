@@ -48,7 +48,23 @@ export class HotelController {
   findAll(@Query() queryParams: queryType) {
     // Placeholder for query params
     // Add filtering/pagination based on queryParams later
-    return this.hotelService.findAll(queryParams);
+    return this.hotelService.findAll(queryParams, {});
+  }
+
+  @Post('/confirm-hotel/:hotelId')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  confirmHotel(@Param('hotelId') hotelId: string) {
+    return this.hotelService.confirmHotel(hotelId);
+  }
+
+  @Get('/not-confirmed')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  findAllConfirmed(@Query() queryParams: queryType) {
+    // Placeholder for query params
+    // Add filtering/pagination based on queryParams later
+    return this.hotelService.findAll(queryParams, {
+      isConfirmedByAdmin: false,
+    });
   }
 
   @Get(':id')

@@ -485,13 +485,47 @@ export class HotelService {
     }
   }
 
-  async findAll(query: queryType) {
+  async confirmHotel(hotelId: string) {
+    const hotel = await this.hotelModel.findById(hotelId);
+    if (!hotel) {
+      throw new NotFoundException(`Hotel with ID ${hotelId} not found`);
+    }
+    hotel.isConfirmedByAdmin = true;
+    await hotel.save();
+    return hotel;
+  }
+
+  async findAll(
+    query: queryType,
+    extraFilters: {
+      isConfirmedByAdmin?: boolean;
+    },
+  ) {
+    let extraQueries: any = {
+      isPublished: {
+        $ne: false,
+      },
+    };
+
+    if (extraFilters.isConfirmedByAdmin === false) {
+      extraQueries = {
+        ...extraQueries,
+        isConfirmedByAdmin: {
+          $ne: true,
+        },
+      };
+    }
+
+    console.log({
+      extraQueries,
+    });
+
     // Consider adding pagination later
     return await generalPaginate({
       model: this.hotelModel,
       query,
       searchFields: ['title.en', 'title.tr'],
-      extraQueries: {},
+      extraQueries,
     });
   }
 
