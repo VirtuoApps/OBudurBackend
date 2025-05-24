@@ -5,6 +5,7 @@ import {
   IsUrl,
   IsIn,
   IsObject,
+  IsBoolean,
   // ValidateNested, // Not needed for basic object check
   // IsMap, // Does not exist
 } from 'class-validator';
@@ -30,4 +31,8 @@ export class CreateFeatureDto {
   @IsIn(['inside', 'outside', 'general'])
   @IsNotEmpty()
   featureType: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isQuickFilter: boolean;
 }

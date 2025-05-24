@@ -17,6 +17,9 @@ export class Feature {
     required: true,
   })
   featureType: string;
+
+  @Prop({ type: Boolean, required: true, default: false })
+  isQuickFilter: boolean;
 }
 
 export const FeatureSchema = SchemaFactory.createForClass(Feature);

@@ -1,4 +1,11 @@
-import { IsString, IsOptional, IsUrl, IsIn, IsObject } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsUrl,
+  IsIn,
+  IsObject,
+  IsBoolean,
+} from 'class-validator';
 
 // Manually define Update DTO
 export class UpdateFeatureDto {
@@ -14,4 +21,8 @@ export class UpdateFeatureDto {
   @IsIn(['inside', 'outside', 'general'])
   @IsOptional()
   featureType?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isQuickFilter?: boolean;
 }

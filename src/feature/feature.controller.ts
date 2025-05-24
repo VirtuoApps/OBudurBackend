@@ -39,6 +39,14 @@ export class FeatureController {
     return this.featureService.findAll(query, getFeaturesDto);
   }
 
+  @Put('/quick-filters')
+  findAllQuickFilters(
+    @Query() query: queryType,
+    @Body() getFeaturesDto: GetFeaturesDto,
+  ) {
+    return this.featureService.findAllQuickFilters(query, getFeaturesDto);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.featureService.findOne(id);

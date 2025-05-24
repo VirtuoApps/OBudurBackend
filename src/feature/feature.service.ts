@@ -48,6 +48,25 @@ export class FeatureService {
     });
   }
 
+  async findAllQuickFilters(query: queryType, getFeaturesDto: GetFeaturesDto) {
+    const { featureType } = getFeaturesDto;
+
+    const extraQueries: any = {
+      isQuickFilter: true,
+    };
+
+    if (featureType) {
+      extraQueries.featureType = featureType;
+    }
+
+    return await generalPaginate({
+      model: this.featureModel,
+      query,
+      searchFields: ['name.tr', 'name.en'], // Adjust fields as necessary
+      extraQueries,
+    });
+  }
+
   async findOne(id: string): Promise<Feature> {
     if (!Types.ObjectId.isValid(id)) {
       throw new NotFoundException(`Invalid Feature ID: ${id}`);
