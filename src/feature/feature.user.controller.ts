@@ -14,4 +14,9 @@ export class FeatureUserController {
   getAllOptions() {
     return this.featureService.allOptions();
   }
+
+  @Get('/all-quick-filters')
+  allQuickFilters() {
+    return this.featureService.allQuickFilters();
+  }
 }

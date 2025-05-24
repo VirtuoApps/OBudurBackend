@@ -21,6 +21,10 @@ export class FeatureService {
     return await this.featureModel.find().exec();
   }
 
+  async allQuickFilters() {
+    return await this.featureModel.find({ isQuickFilter: true }).exec();
+  }
+
   async create(createFeatureDto: CreateFeatureDto): Promise<Feature> {
     // Convert Record<string, string> back to Map for Mongoose
     const featureData = {
