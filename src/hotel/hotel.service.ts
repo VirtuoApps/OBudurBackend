@@ -254,6 +254,7 @@ export class HotelService {
           { state: { $exists: true, $ne: null } },
           { roomCount: { $exists: true, $ne: null } },
           { bathroomCount: { $exists: true, $ne: null } },
+          { entranceType: { $exists: true, $ne: null } },
         ],
       })
       .lean();
@@ -279,6 +280,7 @@ export class HotelService {
     const uniqueStates = new Map(); // Global list of unique states
     const roomCountSet = new Set();
     const bathroomCountSet = new Set();
+    const entranceTypeSet = new Map();
 
     // Map to store country-specific details (cities and states)
     const countryDetailsMap = new Map<
@@ -316,6 +318,15 @@ export class HotelService {
       // Process bathroomCount
       if (hotel.bathroomCount && !bathroomCountSet.has(hotel.bathroomCount)) {
         bathroomCountSet.add(hotel.bathroomCount);
+      }
+
+      // Process entrance type
+      if (
+        hotel.entranceType &&
+        !entranceTypeSet.has(JSON.stringify(hotel.entranceType))
+      ) {
+        const key = JSON.stringify(hotel.entranceType);
+        entranceTypeSet.set(key, hotel.entranceType);
       }
 
       // Process global list of unique states
@@ -416,6 +427,7 @@ export class HotelService {
       interiorFeatures: Array.from(interiorFeatures.values()),
       outsideFeatures: Array.from(outsideFeatures.values()),
       generalFeatures: Array.from(generalFeatures.values()),
+      entranceType: Array.from(entranceTypeSet.values()),
     };
   }
 
@@ -553,6 +565,21 @@ export class HotelService {
         'listingType.tr': { $regex: getHotelsDto.listingType, $options: 'i' },
       };
     }
+
+    if (getHotelsDto?.housingType) {
+      extraQueries = {
+        ...extraQueries,
+        'housingType.tr': { $regex: getHotelsDto.housingType, $options: 'i' },
+      };
+    }
+
+    if (getHotelsDto?.entranceType) {
+      extraQueries = {
+        ...extraQueries,
+        'entranceType.tr': { $regex: getHotelsDto.entranceType, $options: 'i' },
+      };
+    }
+
     // Consider adding pagination later
     return await generalPaginate({
       model: this.hotelModel,
