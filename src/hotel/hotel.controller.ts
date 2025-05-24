@@ -8,7 +8,8 @@ import {
   Delete,
   UseGuards,
   ValidationPipe,
-  Query, // For potential filtering/pagination later
+  Query,
+  Put, // For potential filtering/pagination later
 } from '@nestjs/common';
 import { HotelService } from './hotel.service';
 import { CreateHotelDto } from './dto/create-hotel.dto';
@@ -17,6 +18,7 @@ import { AdminGuard } from '../common/guards/admin.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { queryType } from 'src/common/utils/general-paginate';
 import { UserId } from 'src/common/decorators/user-id.decarator';
+import { GetHotelsDto } from './dto/get-hotels.dto';
 @Controller('admin/hotels')
 export class HotelController {
   constructor(private readonly hotelService: HotelService) {}
@@ -73,14 +75,21 @@ export class HotelController {
     });
   }
 
-  @Get('/not-confirmed')
+  @Put('/not-confirmed')
   @UseGuards(AuthGuard('jwt'), AdminGuard)
-  findAllNotConfirmed(@Query() queryParams: queryType) {
+  findAllNotConfirmed(
+    @Query() queryParams: queryType,
+    @Body() getHotelsDto: GetHotelsDto,
+  ) {
     // Placeholder for query params
     // Add filtering/pagination based on queryParams later
-    return this.hotelService.findAll(queryParams, {
-      isConfirmedByAdmin: false,
-    });
+    return this.hotelService.findAll(
+      queryParams,
+      {
+        isConfirmedByAdmin: false,
+      },
+      getHotelsDto,
+    );
   }
 
   @Get('/confirmed')

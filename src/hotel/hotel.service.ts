@@ -21,6 +21,7 @@ import {
   HotelMessages,
   HotelMessagesDocument,
 } from 'src/common/schemas/HotelMessages.schema';
+import { GetHotelsDto } from './dto/get-hotels.dto';
 // Import related services if validation is needed
 // import { FeatureService } from '../feature/feature.service';
 // import { DistanceTypeService } from '../distancetype/distancetype.service';
@@ -511,6 +512,7 @@ export class HotelService {
       isConfirmedByAdmin?: boolean;
       isPublished?: boolean;
     },
+    getHotelsDto?: GetHotelsDto,
   ) {
     let extraQueries: any = {};
 
@@ -545,6 +547,12 @@ export class HotelService {
       };
     }
 
+    if (getHotelsDto?.listingType) {
+      extraQueries = {
+        ...extraQueries,
+        'listingType.tr': { $regex: getHotelsDto.listingType, $options: 'i' },
+      };
+    }
     // Consider adding pagination later
     return await generalPaginate({
       model: this.hotelModel,
