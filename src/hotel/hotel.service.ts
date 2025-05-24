@@ -509,19 +509,19 @@ export class HotelService {
     query: queryType,
     extraFilters: {
       isConfirmedByAdmin?: boolean;
+      isPublished?: boolean;
     },
   ) {
-    let extraQueries: any = {
-      isPublished: {
-        $ne: false,
-      },
-    };
+    let extraQueries: any = {};
 
     if (extraFilters.isConfirmedByAdmin === false) {
       extraQueries = {
         ...extraQueries,
         isConfirmedByAdmin: {
           $ne: true,
+        },
+        isPublished: {
+          $ne: false,
         },
       };
     }
@@ -530,6 +530,18 @@ export class HotelService {
       extraQueries = {
         ...extraQueries,
         isConfirmedByAdmin: true,
+        isPublished: {
+          $ne: false,
+        },
+      };
+    }
+
+    if (extraFilters.isPublished === false) {
+      extraQueries = {
+        ...extraQueries,
+        isPublished: {
+          $ne: true,
+        },
       };
     }
 

@@ -63,6 +63,16 @@ export class HotelController {
     return this.hotelService.disableConfirmHotel(hotelId);
   }
 
+  @Get('/not-published')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  findAllNotPublished(@Query() queryParams: queryType) {
+    // Placeholder for query params
+    // Add filtering/pagination based on queryParams later
+    return this.hotelService.findAll(queryParams, {
+      isPublished: false,
+    });
+  }
+
   @Get('/not-confirmed')
   @UseGuards(AuthGuard('jwt'), AdminGuard)
   findAllNotConfirmed(@Query() queryParams: queryType) {
