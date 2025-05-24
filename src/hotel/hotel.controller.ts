@@ -65,14 +65,21 @@ export class HotelController {
     return this.hotelService.disableConfirmHotel(hotelId);
   }
 
-  @Get('/not-published')
+  @Put('/not-published')
   @UseGuards(AuthGuard('jwt'), AdminGuard)
-  findAllNotPublished(@Query() queryParams: queryType) {
+  findAllNotPublished(
+    @Query() queryParams: queryType,
+    @Body() getHotelsDto: GetHotelsDto,
+  ) {
     // Placeholder for query params
     // Add filtering/pagination based on queryParams later
-    return this.hotelService.findAll(queryParams, {
-      isPublished: false,
-    });
+    return this.hotelService.findAll(
+      queryParams,
+      {
+        isPublished: false,
+      },
+      getHotelsDto,
+    );
   }
 
   @Put('/not-confirmed')
@@ -92,14 +99,21 @@ export class HotelController {
     );
   }
 
-  @Get('/confirmed')
+  @Put('/confirmed')
   @UseGuards(AuthGuard('jwt'), AdminGuard)
-  findAllConfirmed(@Query() queryParams: queryType) {
+  findAllConfirmed(
+    @Query() queryParams: queryType,
+    @Body() getHotelsDto: GetHotelsDto,
+  ) {
     // Placeholder for query params
     // Add filtering/pagination based on queryParams later
-    return this.hotelService.findAll(queryParams, {
-      isConfirmedByAdmin: true,
-    });
+    return this.hotelService.findAll(
+      queryParams,
+      {
+        isConfirmedByAdmin: true,
+      },
+      getHotelsDto,
+    );
   }
 
   @Get(':id')
