@@ -57,20 +57,24 @@ export class HotelService {
       throw new NotFoundException(`Hotel with slug ${slug} not found`);
     }
 
-    const generalFeatures = await this.featureModel.find({
-      featureType: 'general',
+    // Fetch all features in a single query
+    const allFeatures = await this.featureModel.find({
       _id: { $in: hotel.featureIds },
     });
 
-    const insideFeatures = await this.featureModel.find({
-      featureType: 'inside',
-      _id: { $in: hotel.featureIds },
-    });
-
-    const outsideFeatures = await this.featureModel.find({
-      featureType: 'outside',
-      _id: { $in: hotel.featureIds },
-    });
+    // Categorize features based on their properties
+    const generalFeatures = allFeatures.filter(
+      (feature) => feature.featureType === 'general',
+    );
+    const insideFeatures = allFeatures.filter(
+      (feature) => feature.featureType === 'inside',
+    );
+    const outsideFeatures = allFeatures.filter(
+      (feature) => feature.featureType === 'outside',
+    );
+    const quickFilters = allFeatures.filter(
+      (feature) => feature.isQuickFilter === true,
+    );
 
     const allDistances = await this.distanceTypeModel.find({
       _id: { $in: hotel.distances.map((d) => d.typeId) },
@@ -98,6 +102,7 @@ export class HotelService {
         insideFeatures,
         outsideFeatures,
         distances: populatedDistances,
+        quickFilters,
       },
       manager,
     };
