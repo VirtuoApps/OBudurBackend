@@ -16,6 +16,7 @@ import { HotelMessagesModule } from './hotel-messages/hotel-messages.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { MailDroppersModule } from './mail-droppers/mail-droppers.module';
 import { HotelCategoryModule } from './hotel-category/hotel-category.module';
+import { HotelTypesModule } from './hotel-types/hotel-types.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { HotelCategoryModule } from './hotel-category/hotel-category.module';
     DistanceTypeModule,
     HotelModule,
     HotelCategoryModule,
+    HotelTypesModule,
     CloudflareR2Module,
     ConfigModule.forRoot({
       isGlobal: true,
