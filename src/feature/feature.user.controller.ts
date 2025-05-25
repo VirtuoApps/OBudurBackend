@@ -19,4 +19,14 @@ export class FeatureUserController {
   allQuickFilters() {
     return this.featureService.allQuickFilters();
   }
+
+  @Get('/for-olds-and-disabled')
+  getAllForOldAndDisabledFeatures() {
+    return this.featureService.getAllForOldAndDisabledFeatures();
+  }
+
+  @Get('/face')
+  getAllFaceFeatures() {
+    return this.featureService.getAllFaceFeatures();
+  }
 }

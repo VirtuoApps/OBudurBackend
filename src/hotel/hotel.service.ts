@@ -267,6 +267,14 @@ export class HotelService {
       featureType: 'outside',
     });
 
+    const accessibilityFeatures = await this.featureModel.find({
+      featureType: 'for-olds-and-disabled',
+    });
+
+    const faceFeatures = await this.featureModel.find({
+      featureType: 'face',
+    });
+
     const generalFeatures = await this.featureModel.find({
       featureType: 'general',
     });
@@ -427,6 +435,8 @@ export class HotelService {
       interiorFeatures: Array.from(interiorFeatures.values()),
       outsideFeatures: Array.from(outsideFeatures.values()),
       generalFeatures: Array.from(generalFeatures.values()),
+      accessibilityFeatures: Array.from(accessibilityFeatures.values()),
+      faceFeatures: Array.from(faceFeatures.values()),
       entranceType: Array.from(entranceTypeSet.values()),
     };
   }

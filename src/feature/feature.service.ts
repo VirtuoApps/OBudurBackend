@@ -115,4 +115,14 @@ export class FeatureService {
     }
     return { deleted: true };
   }
+
+  async getAllForOldAndDisabledFeatures() {
+    return await this.featureModel
+      .find({ featureType: 'for-olds-and-disabled' })
+      .exec();
+  }
+
+  async getAllFaceFeatures() {
+    return await this.featureModel.find({ featureType: 'face' }).exec();
+  }
 }
