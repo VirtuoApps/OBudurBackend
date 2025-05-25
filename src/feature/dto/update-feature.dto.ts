@@ -13,12 +13,12 @@ export class UpdateFeatureDto {
   @IsOptional()
   name?: Record<string, string>;
 
-  @IsUrl()
+  @IsString()
   @IsOptional()
   iconUrl?: string;
 
   @IsString()
-  @IsIn(['inside', 'outside', 'general'])
+  @IsIn(['inside', 'outside', 'general', 'for-olds-and-disabled', 'face'])
   @IsOptional()
   featureType?: string;
 

@@ -23,12 +23,12 @@ export class CreateFeatureDto {
   @IsNotEmpty()
   name: Record<string, string>; // Use Record<string, string> which maps well to Map
 
-  @IsUrl()
-  @IsNotEmpty()
-  iconUrl: string;
+  @IsString()
+  @IsOptional()
+  iconUrl?: string;
 
   @IsString()
-  @IsIn(['inside', 'outside', 'general'])
+  @IsIn(['inside', 'outside', 'general', 'for-olds-and-disabled', 'face'])
   @IsNotEmpty()
   featureType: string;
 

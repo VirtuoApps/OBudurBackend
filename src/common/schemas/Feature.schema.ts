@@ -8,12 +8,12 @@ export class Feature {
   @Prop({ type: MongooseSchema.Types.Map, of: String, required: true })
   name: Map<string, string>;
 
-  @Prop({ type: String, required: true })
-  iconUrl: string;
+  @Prop({ type: String, required: false })
+  iconUrl?: string;
 
   @Prop({
     type: String,
-    enum: ['inside', 'outside', 'general'],
+    enum: ['inside', 'outside', 'general', 'for-olds-and-disabled', 'face'],
     required: true,
   })
   featureType: string;
