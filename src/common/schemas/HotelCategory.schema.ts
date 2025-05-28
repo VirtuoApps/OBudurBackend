@@ -7,6 +7,9 @@ export type HotelCategoryDocument = HydratedDocument<HotelCategory>;
 export class HotelCategory {
   @Prop({ type: MongooseSchema.Types.Map, of: String, required: true })
   name: Map<string, string>;
+
+  @Prop({ type: String, of: String, required: true })
+  hotelTypeId: string;
 }
 
 export const HotelCategorySchema = SchemaFactory.createForClass(HotelCategory);

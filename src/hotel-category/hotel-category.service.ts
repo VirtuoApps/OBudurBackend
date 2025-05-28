@@ -9,16 +9,37 @@ import { CreateHotelCategoryDto } from './dto/create-hotel-category.dto';
 import { UpdateHotelCategoryDto } from './dto/update-hotel-category.dto';
 import generalPaginate, { queryType } from 'src/common/utils/general-paginate';
 import { GetHotelCategoriesDto } from './dto/get-hotel-categories.dto';
+import { HotelType } from 'src/common/schemas/HotelType.schema';
 
 @Injectable()
 export class HotelCategoryService {
   constructor(
     @InjectModel(HotelCategory.name)
     private hotelCategoryModel: Model<HotelCategoryDocument>,
+    @InjectModel(HotelType.name) private hotelType: Model<HotelType>,
   ) {}
 
   async allOptions() {
-    return await this.hotelCategoryModel.find().exec();
+    const hotelCategories = await this.hotelCategoryModel.find().exec();
+
+    const allHotelTypes = await this.hotelType.find();
+
+    const populatedCategories = [];
+
+    hotelCategories.forEach((cat) => {
+      const type = allHotelTypes.find(
+        (type) => type._id.toString() === cat.hotelTypeId.toString(),
+      );
+
+      if (type) {
+        populatedCategories.push({
+          ...cat.toObject(),
+          type,
+        });
+      }
+    });
+
+    return populatedCategories;
   }
 
   async create(
