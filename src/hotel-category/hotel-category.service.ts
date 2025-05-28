@@ -34,6 +34,7 @@ export class HotelCategoryService {
       if (type) {
         populatedCategories.push({
           ...cat.toObject(),
+          name: cat.name,
           type,
         });
       }
