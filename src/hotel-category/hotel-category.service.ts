@@ -60,12 +60,33 @@ export class HotelCategoryService {
   ) {
     const extraQueries: any = {};
 
-    return await generalPaginate({
+    if (getHotelCategoriesDto.hotelTypeId) {
+      extraQueries.hotelTypeId = getHotelCategoriesDto.hotelTypeId;
+    }
+
+    const paginatedRes = await generalPaginate({
       model: this.hotelCategoryModel,
       query,
       searchFields: ['name.tr', 'name.en'], // Adjust fields as necessary
       extraQueries,
     });
+
+    const allHotelTypes = await this.hotelType.find();
+
+    const populatedResult = [];
+
+    paginatedRes.result.forEach((item) => {
+      const type = allHotelTypes.find(
+        (type) => type._id.toString() === item.hotelTypeId.toString(),
+      );
+
+      populatedResult.push({ ...item.toObject(), name: item.name, type });
+    });
+
+    return {
+      ...paginatedRes,
+      result: populatedResult,
+    };
   }
 
   async findOne(id: string): Promise<HotelCategory> {
