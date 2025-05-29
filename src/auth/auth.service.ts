@@ -42,8 +42,14 @@ export class AuthService {
     userId: string,
     updateMineAccountDto: UpdateMineAccountDto,
   ) {
-    const { email, password, firstName, lastName, phoneNumber } =
-      updateMineAccountDto;
+    const {
+      email,
+      password,
+      firstName,
+      lastName,
+      phoneNumber,
+      profilePicture,
+    } = updateMineAccountDto;
 
     const user = await this.users.findById(userId);
 
@@ -60,6 +66,7 @@ export class AuthService {
     if (firstName) updateData.firstName = firstName;
     if (lastName) updateData.lastName = lastName;
     if (phoneNumber) updateData.phoneNumber = phoneNumber;
+    if (profilePicture) updateData.profilePicture = profilePicture;
 
     if (email && email !== user.email) {
       const emailExists = await this.users.findOne({

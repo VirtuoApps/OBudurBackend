@@ -13,24 +13,25 @@ export class UpdateMineAccountDto {
   @IsString()
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
   password: string;
 
   @IsString()
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
   firstName: string;
 
   @IsString()
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
   lastName: string;
 
   @IsString()
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
   phoneNumber: string;
+
+  @IsString()
+  @IsOptional()
+  @IsString()
+  profilePicture: string;
 }

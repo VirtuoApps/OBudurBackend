@@ -20,7 +20,6 @@ import { queryType } from 'src/common/utils/general-paginate';
 import { GetHotelCategoriesDto } from './dto/get-hotel-categories.dto';
 
 @Controller('admin/hotel-categories')
-@UseGuards(AuthGuard('jwt'), AdminGuard)
 export class HotelCategoryController {
   constructor(private readonly hotelCategoryService: HotelCategoryService) {}
 
@@ -30,6 +29,7 @@ export class HotelCategoryController {
   }
 
   @Post()
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   create(@Body(ValidationPipe) createHotelCategoryDto: CreateHotelCategoryDto) {
     return this.hotelCategoryService.create(createHotelCategoryDto);
   }
@@ -48,6 +48,7 @@ export class HotelCategoryController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   update(
     @Param('id') id: string,
     @Body(ValidationPipe) updateHotelCategoryDto: UpdateHotelCategoryDto,
@@ -56,6 +57,7 @@ export class HotelCategoryController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
   remove(@Param('id') id: string) {
     return this.hotelCategoryService.remove(id);
   }
