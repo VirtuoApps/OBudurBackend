@@ -17,6 +17,7 @@ import { FavoritesModule } from './favorites/favorites.module';
 import { MailDroppersModule } from './mail-droppers/mail-droppers.module';
 import { HotelCategoryModule } from './hotel-category/hotel-category.module';
 import { HotelTypesModule } from './hotel-types/hotel-types.module';
+import { SavedFiltersModule } from './saved-filters/saved-filters.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { HotelTypesModule } from './hotel-types/hotel-types.module';
     HotelMessagesModule,
     FavoritesModule,
     MailDroppersModule,
+    SavedFiltersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
