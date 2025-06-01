@@ -42,13 +42,12 @@ export class SavedFiltersService {
     });
   }
 
-  async findAllByUser(userId: string, query: queryType): Promise<any> {
-    return await generalPaginate({
-      model: this.savedFilterModel,
-      query,
-      searchFields: ['filterName'],
-      extraQueries: { userId },
-    });
+  async findAllByUser(userId: string): Promise<any> {
+    const mineSavedFilters = await this.savedFilterModel
+      .find({ userId })
+      .exec();
+
+    return mineSavedFilters;
   }
 
   async findOne(id: string): Promise<SavedFilter> {

@@ -33,8 +33,8 @@ export class SavedFiltersController {
   }
 
   @Get('/mine')
-  findMine(@UserId() userId: string, @Query() query: queryType) {
-    return this.savedFiltersService.findAllByUser(userId, query);
+  findMine(@UserId() userId: string) {
+    return this.savedFiltersService.findAllByUser(userId);
   }
 
   @Get('/mine/:id')
