@@ -117,6 +117,9 @@ export class SavedFilter {
 
   @Prop({ type: Date })
   updatedAt?: Date;
+
+  @Prop({ type: Number })
+  resultCount: number;
 }
 
 export const SavedFilterSchema = SchemaFactory.createForClass(SavedFilter);

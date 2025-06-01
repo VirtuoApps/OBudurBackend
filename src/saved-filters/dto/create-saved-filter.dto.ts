@@ -177,4 +177,8 @@ export class CreateSavedFilterDto {
   @IsOptional()
   @IsObject()
   selectedLocation?: LocationTypeDto | null;
+
+  @IsNumber()
+  @IsOptional()
+  resultCount?: number | null;
 }
