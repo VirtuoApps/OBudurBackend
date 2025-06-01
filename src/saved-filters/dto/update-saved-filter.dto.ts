@@ -6,6 +6,9 @@ import {
   IsOptional,
   Min,
   ValidateNested,
+  ArrayMinSize,
+  ArrayMaxSize,
+  IsObject,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -37,6 +40,23 @@ class FeatureTypeDto {
   @IsNumber()
   @IsOptional()
   __v?: number;
+}
+
+class LocationTypeDto {
+  @IsString()
+  @IsOptional()
+  name?: string;
+
+  @IsString()
+  @IsOptional()
+  description?: string;
+
+  @IsArray()
+  @ArrayMinSize(2)
+  @ArrayMaxSize(2)
+  @IsNumber({}, { each: true })
+  @IsOptional()
+  coordinates?: [number, number];
 }
 
 export class UpdateSavedFilterDto {
@@ -153,4 +173,8 @@ export class UpdateSavedFilterDto {
   @ValidateNested({ each: true })
   @Type(() => FeatureTypeDto)
   selectedFeatures?: FeatureTypeDto[];
+
+  @IsOptional()
+  @IsObject()
+  selectedLocation?: LocationTypeDto | null;
 }

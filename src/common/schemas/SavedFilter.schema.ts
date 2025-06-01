@@ -1,5 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
+import mongoose, {
+  HydratedDocument,
+  Schema as MongooseSchema,
+  Types,
+} from 'mongoose';
 
 export type SavedFilterDocument = HydratedDocument<SavedFilter>;
 
@@ -12,6 +16,13 @@ export interface FeatureType {
   createdAt: string;
   updatedAt: string;
   __v: number;
+}
+
+// Define the LocationType interface for validation
+export interface LocationType {
+  name: string;
+  description: string;
+  coordinates: [number, number]; // [longitude, latitude]
 }
 
 @Schema({ timestamps: true, collection: 'saved_filters' })
@@ -94,6 +105,12 @@ export class SavedFilter {
 
   @Prop({ type: [MongooseSchema.Types.Mixed], default: [] })
   selectedFeatures: FeatureType[];
+
+  @Prop({
+    type: mongoose.Schema.Types.Mixed,
+    default: null,
+  })
+  selectedLocation: LocationType | null;
 
   @Prop({ type: Date })
   createdAt?: Date;

@@ -7,6 +7,9 @@ import {
   IsNotEmpty,
   Min,
   ValidateNested,
+  ArrayMinSize,
+  ArrayMaxSize,
+  IsObject,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -38,6 +41,22 @@ class FeatureTypeDto {
   @IsNumber()
   @IsNotEmpty()
   __v: number;
+}
+
+class LocationTypeDto {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  description: string;
+
+  @IsArray()
+  @ArrayMinSize(2)
+  @ArrayMaxSize(2)
+  @IsNumber({}, { each: true })
+  coordinates: [number, number];
 }
 
 export class CreateSavedFilterDto {
@@ -154,4 +173,8 @@ export class CreateSavedFilterDto {
   @ValidateNested({ each: true })
   @Type(() => FeatureTypeDto)
   selectedFeatures?: FeatureTypeDto[];
+
+  @IsOptional()
+  @IsObject()
+  selectedLocation?: LocationTypeDto | null;
 }
