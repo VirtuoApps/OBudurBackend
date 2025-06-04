@@ -108,14 +108,8 @@ export class SavedFiltersService {
     }
 
     const deletedFilter = await this.savedFilterModel
-      .findOneAndDelete({ _id: id, userId })
+      .findOneAndDelete({ _id: id, userId: userId.toString() })
       .exec();
-
-    if (!deletedFilter) {
-      throw new NotFoundException(
-        `SavedFilter with ID ${id} not found for this user`,
-      );
-    }
 
     return deletedFilter;
   }
