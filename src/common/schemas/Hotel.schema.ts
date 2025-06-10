@@ -6,10 +6,10 @@ export type HotelDocument = HydratedDocument<Hotel>;
 // --- Subschemas ---
 @Schema({ _id: false })
 class DistanceSubSchema {
-  @Prop({ type: MongooseSchema.Types.ObjectId, required: true }) // No ref needed as per requirement
+  @Prop({ type: MongooseSchema.Types.ObjectId, required: false }) // No ref needed as per requirement
   typeId: Types.ObjectId;
 
-  @Prop({ type: Number, required: true })
+  @Prop({ type: Number, required: false })
   value: number;
 }
 
@@ -25,29 +25,29 @@ class PriceSubSchema {
 // Define location schema directly in Hotel schema
 @Schema({ _id: false })
 class LocationSubSchema {
-  @Prop({ type: String, enum: ['Point'], required: true, default: 'Point' })
+  @Prop({ type: String, enum: ['Point'], required: false, default: 'Point' })
   type: string;
 
-  @Prop({ type: [Number], required: true }) // [longitude, latitude]
+  @Prop({ type: [Number], required: false }) // [longitude, latitude]
   coordinates: number[];
 }
 
 // --- Main Hotel Schema ---
 @Schema({ timestamps: true, collection: 'hotels' })
 export class Hotel {
-  @Prop({ type: Number, required: true })
+  @Prop({ type: Number, required: false })
   no: number;
 
   @Prop({
     type: String,
-    required: true,
+    required: false,
   })
   face: 'west' | 'east' | 'south' | 'north';
 
-  @Prop({ type: String, unique: true, required: true })
+  @Prop({ type: String, unique: true, required: false })
   slug: string;
 
-  @Prop({ type: MongooseSchema.Types.Map, of: String, required: true })
+  @Prop({ type: MongooseSchema.Types.Map, of: String, required: false })
   title: Map<string, string>;
 
   @Prop({ type: MongooseSchema.Types.Map, of: String })
