@@ -69,6 +69,12 @@ export class Hotel {
   street?: Map<string, string>;
 
   @Prop({ type: String })
+  adaNo?: string;
+
+  @Prop({ type: String })
+  parselNo?: string;
+
+  @Prop({ type: String })
   buildingNo?: string;
 
   @Prop({ type: String, of: String })
