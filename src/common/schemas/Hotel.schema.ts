@@ -41,7 +41,6 @@ export class Hotel {
   @Prop({
     type: String,
     required: true,
-    enum: ['west', 'east', 'south', 'north'],
   })
   face: 'west' | 'east' | 'south' | 'north';
 
