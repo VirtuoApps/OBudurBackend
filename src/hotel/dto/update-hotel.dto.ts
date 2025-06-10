@@ -268,4 +268,8 @@ export class UpdateHotelDto {
   @IsObject()
   @IsOptional()
   zoningStatus?: Record<string, string>;
+
+  @IsOptional()
+  @IsArray()
+  infrastructureFeatureIds: string[];
 }

@@ -200,6 +200,9 @@ export class Hotel {
 
   @Prop({ type: MongooseSchema.Types.Map, of: String })
   zoningStatus?: Map<string, string>; // İmar Durumu
+
+  @Prop({ type: Array })
+  infrastructureFeatureIds: string[];
 }
 
 export const HotelSchema = SchemaFactory.createForClass(Hotel);
