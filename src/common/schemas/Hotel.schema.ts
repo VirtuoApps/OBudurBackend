@@ -171,8 +171,8 @@ export class Hotel {
   @Prop({ type: Boolean })
   exchangeable?: boolean; // Takaslı
 
-  @Prop({ type: Boolean })
-  creditEligible?: boolean; // Krediye Uygunluk
+  @Prop({ type: MongooseSchema.Types.Mixed })
+  creditEligible?: any; // Krediye Uygunluk
 
   @Prop({ type: Number })
   buildingAge?: number; // Bina Yaşı
@@ -194,6 +194,12 @@ export class Hotel {
 
   @Prop({ type: MongooseSchema.Types.Map, of: String })
   source?: Map<string, string>; // Kimden
+
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  generalFeatures?: Map<string, string>; // Genel Özellikler
+
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  zoningStatus?: Map<string, string>; // İmar Durumu
 }
 
 export const HotelSchema = SchemaFactory.createForClass(Hotel);

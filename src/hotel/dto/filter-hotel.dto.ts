@@ -184,4 +184,12 @@ export class FilterHotelDto {
   @IsNumber()
   @Min(0)
   maxDuesAmount?: number;
+
+  @IsOptional()
+  @IsString()
+  generalFeatures?: string;
+
+  @IsOptional()
+  @IsString()
+  zoningStatus?: string;
 }

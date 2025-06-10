@@ -230,7 +230,6 @@ export class UpdateHotelDto {
   @IsOptional()
   exchangeable?: boolean;
 
-  @IsBoolean()
   @IsOptional()
   creditEligible?: boolean;
 
@@ -244,9 +243,7 @@ export class UpdateHotelDto {
   isFurnished?: boolean;
 
   @IsOptional()
-  @ValidateNested()
-  @Type(() => PriceUpdateDto)
-  dues?: PriceUpdateDto;
+  dues?: Record<string, any>;
 
   @IsObject()
   @IsOptional()
@@ -263,4 +260,12 @@ export class UpdateHotelDto {
   @IsObject()
   @IsOptional()
   source?: Record<string, string>;
+
+  @IsObject()
+  @IsOptional()
+  generalFeatures?: Record<string, string>;
+
+  @IsObject()
+  @IsOptional()
+  zoningStatus?: Record<string, string>;
 }

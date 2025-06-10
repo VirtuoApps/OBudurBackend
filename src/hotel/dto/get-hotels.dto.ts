@@ -57,4 +57,12 @@ export class GetHotelsDto {
   @IsOptional()
   @IsString()
   source?: string;
+
+  @IsOptional()
+  @IsString()
+  generalFeatures?: string;
+
+  @IsOptional()
+  @IsString()
+  zoningStatus?: string;
 }

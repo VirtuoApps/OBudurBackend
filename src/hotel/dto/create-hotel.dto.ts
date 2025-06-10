@@ -215,9 +215,8 @@ export class CreateHotelDto {
   @IsOptional()
   exchangeable?: boolean;
 
-  @IsBoolean()
   @IsOptional()
-  creditEligible?: boolean;
+  creditEligible?: any;
 
   @IsNumber()
   @IsOptional()
@@ -229,9 +228,7 @@ export class CreateHotelDto {
   isFurnished?: boolean;
 
   @IsOptional()
-  @ValidateNested()
-  @Type(() => PriceDto)
-  dues?: PriceDto;
+  dues?: Record<string, any>;
 
   @IsObject()
   @IsOptional()
@@ -248,4 +245,12 @@ export class CreateHotelDto {
   @IsObject()
   @IsOptional()
   source?: Record<string, string>;
+
+  @IsObject()
+  @IsOptional()
+  generalFeatures?: Record<string, string>;
+
+  @IsObject()
+  @IsOptional()
+  zoningStatus?: Record<string, string>;
 }
