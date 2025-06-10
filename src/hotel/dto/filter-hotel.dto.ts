@@ -8,6 +8,7 @@ import {
   Max,
   IsEnum,
   IsMongoId,
+  IsBoolean,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -127,4 +128,60 @@ export class FilterHotelDto {
   @IsNumber()
   @Min(0)
   maxDistance?: number;
+
+  // New fields for filtering
+  @IsOptional()
+  @IsBoolean()
+  @Type(() => Boolean)
+  exchangeable?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @Type(() => Boolean)
+  creditEligible?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  @Type(() => Boolean)
+  isFurnished?: boolean;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  buildingAge?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  maxBuildingAge?: number;
+
+  @IsOptional()
+  @IsString()
+  usageStatus?: string;
+
+  @IsOptional()
+  @IsString()
+  deedStatus?: string;
+
+  @IsOptional()
+  @IsString()
+  heatingType?: string;
+
+  @IsOptional()
+  @IsString()
+  source?: string;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  minDuesAmount?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  maxDuesAmount?: number;
 }

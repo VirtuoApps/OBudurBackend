@@ -115,7 +115,10 @@ export class HotelService {
     const query = user.role === 'super-admin' ? {} : { managerId: userId };
 
     // Get hotels based on the query
-    const hotels = await this.hotelModel.find(query).lean();
+    const hotels = await this.hotelModel
+      .find(query)
+      .lean()
+      .sort({ createdAt: -1 });
 
     if (hotels.length === 0) {
       return [];

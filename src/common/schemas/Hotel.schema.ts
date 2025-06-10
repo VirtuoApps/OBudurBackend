@@ -166,6 +166,34 @@ export class Hotel {
     enum: ['active', 'inactive', 'sold', 'stopped', 'optioned'],
   })
   status?: string;
+
+  // New fields
+  @Prop({ type: Boolean })
+  exchangeable?: boolean; // Takaslı
+
+  @Prop({ type: Boolean })
+  creditEligible?: boolean; // Krediye Uygunluk
+
+  @Prop({ type: Number })
+  buildingAge?: number; // Bina Yaşı
+
+  @Prop({ type: Boolean })
+  isFurnished?: boolean; // Eşyalı
+
+  @Prop({ type: MongooseSchema.Types.Mixed })
+  dues?: any;
+
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  usageStatus?: Map<string, string>; // Kullanım Durumu
+
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  deedStatus?: Map<string, string>; // Tapu Durumu
+
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  heatingType?: Map<string, string>; // Isıtma
+
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  source?: Map<string, string>; // Kimden
 }
 
 export const HotelSchema = SchemaFactory.createForClass(Hotel);

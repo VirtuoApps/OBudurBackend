@@ -224,4 +224,43 @@ export class UpdateHotelDto {
   @IsString()
   @IsOptional()
   status?: string;
+
+  // New fields
+  @IsBoolean()
+  @IsOptional()
+  exchangeable?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  creditEligible?: boolean;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  buildingAge?: number;
+
+  @IsBoolean()
+  @IsOptional()
+  isFurnished?: boolean;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => PriceUpdateDto)
+  dues?: PriceUpdateDto;
+
+  @IsObject()
+  @IsOptional()
+  usageStatus?: Record<string, string>;
+
+  @IsObject()
+  @IsOptional()
+  deedStatus?: Record<string, string>;
+
+  @IsObject()
+  @IsOptional()
+  heatingType?: Record<string, string>;
+
+  @IsObject()
+  @IsOptional()
+  source?: Record<string, string>;
 }
