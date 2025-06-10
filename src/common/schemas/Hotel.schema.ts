@@ -203,6 +203,9 @@ export class Hotel {
 
   @Prop({ type: Array })
   infrastructureFeatureIds: string[];
+
+  @Prop({ type: Array })
+  viewIds: string[];
 }
 
 export const HotelSchema = SchemaFactory.createForClass(Hotel);

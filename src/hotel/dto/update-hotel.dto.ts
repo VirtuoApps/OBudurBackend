@@ -272,4 +272,8 @@ export class UpdateHotelDto {
   @IsOptional()
   @IsArray()
   infrastructureFeatureIds: string[];
+
+  @IsOptional()
+  @IsArray()
+  viewIds: string[];
 }

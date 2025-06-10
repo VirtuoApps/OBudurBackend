@@ -97,6 +97,8 @@ export class HotelService {
 
     return {
       hotelDetails: hotel,
+      infrastructureFeatureIds: hotel.infrastructureFeatureIds,
+      viewIds: hotel.viewIds,
       populatedData: {
         generalFeatures,
         insideFeatures,

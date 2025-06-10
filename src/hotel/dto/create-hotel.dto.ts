@@ -257,4 +257,8 @@ export class CreateHotelDto {
   @IsOptional()
   @IsArray()
   infrastructureFeatureIds: string[];
+
+  @IsOptional()
+  @IsArray()
+  viewIds: string[];
 }
