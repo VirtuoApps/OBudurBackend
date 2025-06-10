@@ -121,7 +121,7 @@ export class Hotel {
   balconyCount?: number;
 
   @Prop({ type: Number })
-  bedRoomCount?: number;
+  bedRoomCount?: number; // Yatak Odası Sayısı (Sonradan değiştirildi)
 
   @Prop({ type: MongooseSchema.Types.Map, of: String })
   floorType?: Map<string, string>;
