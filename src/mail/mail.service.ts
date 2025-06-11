@@ -6,11 +6,9 @@ export class MailService {
   constructor(private readonly mailerService: MailerService) {}
 
   async sendVerifyCode(verifyCode: string, email: string) {
-    //TODO: Email disabled for temporary
-    return;
     await this.mailerService.sendMail({
       to: email,
-      subject: 'Iatro Doğrulama Kodunuz',
+      subject: 'Oberon Doğrulama Linkiniiz',
       html: `
         <!DOCTYPE html>
         <html>
@@ -51,13 +49,13 @@ export class MailService {
           </head>
           <body>
             <div class="container">
-              <h1 style="text-align: center; color: #4285f4;">Iatro</h1>
+              <h1 style="text-align: center; color: #4285f4;">Obudur</h1>
               <p>Merhaba,</p>
-              <p>Hesabınızı doğrulamak için aşağıdaki kodu kullanın:</p>
-              <div class="code">${verifyCode}</div>
+              <p>Hesabınızı doğrulamak için aşağıdaki linke tıklayın:</p>
+              <a href="https://obudur-website.vercel.app/eposta-dogrulama/${verifyCode}">Hesabınızı Doğrula</a>
               <p>Eğer bu işlemi siz talep etmediyseniz, lütfen bu e-postayı dikkate almayınız.</p>
               <div class="footer">
-                <p>&copy; ${new Date().getFullYear()} Iatro. Tüm hakları saklıdır.</p>
+                <p>&copy; ${new Date().getFullYear()} Obudur. Tüm hakları saklıdır.</p>
               </div>
             </div>
           </body>

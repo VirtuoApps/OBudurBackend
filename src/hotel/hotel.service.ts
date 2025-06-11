@@ -513,8 +513,9 @@ export class HotelService {
     try {
       const createdHotel = new this.hotelModel({
         ...hotelData,
+        isPublished: true,
         slug: `${slug}-${hotelNo}`,
-        isConfirmedByAdmin: manager.role === 'super-admin' ? true : false,
+        isConfirmedByAdmin: false,
         managerId: new Types.ObjectId(userId),
       });
       return await createdHotel.save();
