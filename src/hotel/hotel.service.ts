@@ -38,6 +38,17 @@ export class HotelService {
     private hotelMessagesModel: Model<HotelMessagesDocument>,
   ) {}
 
+  async fixFaces() {
+    await this.hotelModel.updateMany(
+      {},
+      {
+        $set: {
+          faces: ['683f451177e8aebf4cdce015', '683f452477e8aebf4cdce027'],
+        },
+      },
+    );
+  }
+
   async increaseViewCount(hotelId: string) {
     const hotel = await this.hotelModel.findByIdAndUpdate(
       hotelId,

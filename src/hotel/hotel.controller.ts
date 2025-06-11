@@ -23,6 +23,12 @@ import { GetHotelsDto } from './dto/get-hotels.dto';
 export class HotelController {
   constructor(private readonly hotelService: HotelService) {}
 
+  @Post('/fix-faces')
+  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  fixFaces() {
+    return this.hotelService.fixFaces();
+  }
+
   @Post('/dummy-data')
   @UseGuards(AuthGuard('jwt'), AdminGuard)
   dummyData() {

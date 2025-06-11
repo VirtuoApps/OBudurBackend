@@ -39,10 +39,10 @@ export class Hotel {
   no: number;
 
   @Prop({
-    type: String,
+    type: [String],
     required: false,
   })
-  face: 'west' | 'east' | 'south' | 'north';
+  faces: ('west' | 'east' | 'south' | 'north')[];
 
   @Prop({ type: String, unique: true, required: false })
   slug: string;
