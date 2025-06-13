@@ -23,6 +23,11 @@ import { GetHotelsDto } from './dto/get-hotels.dto';
 export class HotelController {
   constructor(private readonly hotelService: HotelService) {}
 
+  @Patch('/update-all')
+  updateAll() {
+    return this.hotelService.updateAll();
+  }
+
   @Post('/fix-faces')
   @UseGuards(AuthGuard('jwt'))
   fixFaces() {

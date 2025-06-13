@@ -38,6 +38,20 @@ export class HotelService {
     private hotelMessagesModel: Model<HotelMessagesDocument>,
   ) {}
 
+  async updateAll() {
+    await this.hotelModel.updateMany(
+      {
+        'entranceType.tr': 'Ev',
+      },
+      {
+        entranceType: {
+          tr: 'Konut',
+          en: 'Residence',
+        },
+      },
+    );
+  }
+
   async fixFaces() {
     await this.hotelModel.updateMany(
       {},
