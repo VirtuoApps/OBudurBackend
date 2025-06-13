@@ -722,7 +722,6 @@ export class HotelService {
       isPublished: {
         $ne: false,
       },
-      _id: '684c62839a1c1c37f7dc2cbd',
     };
 
     // Apply basic filters
