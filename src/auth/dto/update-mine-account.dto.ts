@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional } from 'class-validator';
+import { IsDate, IsEmail, IsOptional } from 'class-validator';
 
 import { IsNotEmpty } from 'class-validator';
 
@@ -34,4 +34,8 @@ export class UpdateMineAccountDto {
   @IsOptional()
   @IsString()
   profilePicture: string;
+
+  @IsOptional()
+  @IsString()
+  birthDate: string;
 }

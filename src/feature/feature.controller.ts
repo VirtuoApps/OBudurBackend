@@ -14,13 +14,13 @@ import {
 import { FeatureService } from './feature.service';
 import { CreateFeatureDto } from './dto/create-feature.dto';
 import { UpdateFeatureDto } from './dto/update-feature.dto';
-import { AdminGuard } from '../common/guards/admin.guard';
+import {} from '../common/guards/admin.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { queryType } from 'src/common/utils/general-paginate';
 import { GetFeaturesDto } from './dto/get-features.dto';
 
 @Controller('admin/features')
-@UseGuards(AuthGuard('jwt'), AdminGuard)
+@UseGuards(AuthGuard('jwt'))
 export class FeatureController {
   constructor(private readonly featureService: FeatureService) {}
 

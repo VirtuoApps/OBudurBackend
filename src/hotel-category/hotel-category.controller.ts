@@ -14,7 +14,7 @@ import {
 import { HotelCategoryService } from './hotel-category.service';
 import { CreateHotelCategoryDto } from './dto/create-hotel-category.dto';
 import { UpdateHotelCategoryDto } from './dto/update-hotel-category.dto';
-import { AdminGuard } from '../common/guards/admin.guard';
+import {} from '../common/guards/admin.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { queryType } from 'src/common/utils/general-paginate';
 import { GetHotelCategoriesDto } from './dto/get-hotel-categories.dto';
@@ -29,7 +29,7 @@ export class HotelCategoryController {
   }
 
   @Post()
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   create(@Body(ValidationPipe) createHotelCategoryDto: CreateHotelCategoryDto) {
     return this.hotelCategoryService.create(createHotelCategoryDto);
   }
@@ -48,7 +48,7 @@ export class HotelCategoryController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   update(
     @Param('id') id: string,
     @Body(ValidationPipe) updateHotelCategoryDto: UpdateHotelCategoryDto,
@@ -57,7 +57,7 @@ export class HotelCategoryController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   remove(@Param('id') id: string) {
     return this.hotelCategoryService.remove(id);
   }

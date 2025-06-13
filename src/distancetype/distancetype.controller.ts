@@ -13,11 +13,11 @@ import {
 import { DistanceTypeService } from './distancetype.service';
 import { CreateDistanceTypeDto } from './dto/create-distancetype.dto';
 import { UpdateDistanceTypeDto } from './dto/update-distancetype.dto';
-import { AdminGuard } from '../common/guards/admin.guard';
+import {} from '../common/guards/admin.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { queryType } from 'src/common/utils/general-paginate';
 @Controller('admin/distance-types') // Use kebab-case for URL
-@UseGuards(AuthGuard('jwt'), AdminGuard)
+@UseGuards(AuthGuard('jwt'))
 export class DistanceTypeController {
   constructor(private readonly distanceTypeService: DistanceTypeService) {}
 

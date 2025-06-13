@@ -49,6 +49,7 @@ export class AuthService {
       lastName,
       phoneNumber,
       profilePicture,
+      birthDate,
     } = updateMineAccountDto;
 
     const user = await this.users.findById(userId);
@@ -67,7 +68,7 @@ export class AuthService {
     if (lastName) updateData.lastName = lastName;
     if (phoneNumber) updateData.phoneNumber = phoneNumber;
     if (profilePicture) updateData.profilePicture = profilePicture;
-
+    if (birthDate) updateData.birthDate = new Date(birthDate);
     if (email && email !== user.email) {
       const emailExists = await this.users.findOne({
         email,

@@ -14,7 +14,7 @@ import {
 import { HotelTypesService } from './hotel-types.service';
 import { CreateHotelTypeDto } from './dto/create-hotel-type.dto';
 import { UpdateHotelTypeDto } from './dto/update-hotel-type.dto';
-import { AdminGuard } from '../common/guards/admin.guard';
+import {} from '../common/guards/admin.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { queryType } from 'src/common/utils/general-paginate';
 import { GetHotelTypesDto } from './dto/get-hotel-types.dto';
@@ -29,7 +29,7 @@ export class HotelTypesController {
   }
 
   @Post()
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   create(@Body(ValidationPipe) createHotelTypeDto: CreateHotelTypeDto) {
     return this.hotelTypesService.create(createHotelTypeDto);
   }
@@ -48,7 +48,7 @@ export class HotelTypesController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   update(
     @Param('id') id: string,
     @Body(ValidationPipe) updateHotelTypeDto: UpdateHotelTypeDto,
@@ -57,7 +57,7 @@ export class HotelTypesController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   remove(@Param('id') id: string) {
     return this.hotelTypesService.remove(id);
   }

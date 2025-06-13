@@ -11,7 +11,7 @@ import { HotelMessagesService } from './hotel-messages.service';
 import { CreateInitialMessageDto } from './dto/create-initial-message.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { UserId } from 'src/common/decorators/user-id.decarator';
-import { AdminGuard } from 'src/common/guards/admin.guard';
+import {} from 'src/common/guards/admin.guard';
 import { SetMessageSeenDto } from './dto/set-message-seen.dto';
 
 @Controller('hotel-messages')
@@ -19,13 +19,13 @@ export class HotelMessagesController {
   constructor(private readonly hotelMessagesService: HotelMessagesService) {}
 
   @Get('/:hotelId')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   getMessagesOfHotel(@Param('hotelId') hotelId: string) {
     return this.hotelMessagesService.getMessagesOfHotel(hotelId);
   }
 
   @Patch('/:messageId')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   setMessageSeen(
     @Param('messageId') messageId: string,
     @Body() setMessageSeenDto: SetMessageSeenDto,

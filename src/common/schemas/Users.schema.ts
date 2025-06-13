@@ -48,6 +48,9 @@ export class User {
   @Prop({ type: Date, required: false, default: new Date() })
   createdAt: Date;
 
+  @Prop({ type: Date, required: false })
+  birthDate: Date;
+
   @Prop({ type: Date, required: false, default: new Date() })
   updatedAt: Date;
 }

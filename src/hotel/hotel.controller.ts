@@ -14,7 +14,7 @@ import {
 import { HotelService } from './hotel.service';
 import { CreateHotelDto } from './dto/create-hotel.dto';
 import { UpdateHotelDto } from './dto/update-hotel.dto';
-import { AdminGuard } from '../common/guards/admin.guard';
+import {} from '../common/guards/admin.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { queryType } from 'src/common/utils/general-paginate';
 import { UserId } from 'src/common/decorators/user-id.decarator';
@@ -24,25 +24,25 @@ export class HotelController {
   constructor(private readonly hotelService: HotelService) {}
 
   @Post('/fix-faces')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   fixFaces() {
     return this.hotelService.fixFaces();
   }
 
   @Post('/dummy-data')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   dummyData() {
     return this.hotelService.dummyData();
   }
 
   @Get('/mine')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   getMineHotels(@UserId() userId: string) {
     return this.hotelService.getMineHotels(userId);
   }
 
   @Post()
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   create(
     @Body(ValidationPipe) createHotelDto: CreateHotelDto,
     @UserId() userId: string,
@@ -52,7 +52,7 @@ export class HotelController {
   }
 
   @Get()
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   findAll(@Query() queryParams: queryType) {
     // Placeholder for query params
     // Add filtering/pagination based on queryParams later
@@ -60,19 +60,19 @@ export class HotelController {
   }
 
   @Post('/confirm-hotel/:hotelId')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   confirmHotel(@Param('hotelId') hotelId: string) {
     return this.hotelService.confirmHotel(hotelId);
   }
 
   @Post('/disable-confirm-hotel/:hotelId')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   disableConfirmHotel(@Param('hotelId') hotelId: string) {
     return this.hotelService.disableConfirmHotel(hotelId);
   }
 
   @Put('/not-published')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   findAllNotPublished(
     @Query() queryParams: queryType,
     @Body() getHotelsDto: GetHotelsDto,
@@ -89,7 +89,7 @@ export class HotelController {
   }
 
   @Put('/not-confirmed')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   findAllNotConfirmed(
     @Query() queryParams: queryType,
     @Body() getHotelsDto: GetHotelsDto,
@@ -106,7 +106,7 @@ export class HotelController {
   }
 
   @Put('/confirmed')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   findAllConfirmed(
     @Query() queryParams: queryType,
     @Body() getHotelsDto: GetHotelsDto,
@@ -128,7 +128,7 @@ export class HotelController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   update(
     @Param('id') id: string,
     @Body(ValidationPipe) updateHotelDto: UpdateHotelDto,
@@ -137,7 +137,7 @@ export class HotelController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard('jwt'), AdminGuard)
+  @UseGuards(AuthGuard('jwt'))
   remove(@Param('id') id: string) {
     return this.hotelService.remove(id);
   }
