@@ -39,17 +39,9 @@ export class HotelService {
   ) {}
 
   async updateAll() {
-    await this.hotelModel.updateMany(
-      {
-        'entranceType.tr': 'Ev',
-      },
-      {
-        entranceType: {
-          tr: 'Konut',
-          en: 'Residence',
-        },
-      },
-    );
+    await this.hotelModel.deleteMany({
+      'title.tr': { $regex: 'Hotel', $options: 'i' },
+    });
   }
 
   async fixFaces() {

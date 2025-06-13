@@ -233,8 +233,6 @@ export class AuthService {
     await this.users.findByIdAndUpdate(user._id, {
       $set: {
         verified: true,
-        emailVerifyCode: null,
-        verifySendDate: null,
       },
     });
 
