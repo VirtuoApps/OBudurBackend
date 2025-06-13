@@ -90,6 +90,10 @@ export class UpdateHotelDto {
   @IsOptional()
   country?: Record<string, string>;
 
+  @IsObject()
+  @IsOptional()
+  neighborhood?: Record<string, string>;
+
   @IsNumber()
   @IsOptional()
   @Min(0)

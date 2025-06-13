@@ -66,6 +66,9 @@ export class Hotel {
   state?: Map<string, string>;
 
   @Prop({ type: MongooseSchema.Types.Map, of: String })
+  neighborhood?: Map<string, string>;
+
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
   street?: Map<string, string>;
 
   @Prop({ type: String })
