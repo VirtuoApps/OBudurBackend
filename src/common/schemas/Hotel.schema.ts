@@ -135,7 +135,14 @@ export class Hotel {
   @Prop({ type: MongooseSchema.Types.Map, of: String })
   entranceType?: Map<string, string>;
 
-  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  @Prop({
+    type: MongooseSchema.Types.Map,
+    of: String,
+    default: {
+      tr: 'Satılık',
+      en: 'For Sale',
+    },
+  })
   listingType?: Map<string, string>;
 
   /* Relational fields (raw ObjectId) */

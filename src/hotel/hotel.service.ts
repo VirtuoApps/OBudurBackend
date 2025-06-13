@@ -531,6 +531,8 @@ export class HotelService {
         slug: `${slug}-${hotelNo}`,
         isConfirmedByAdmin: false,
         managerId: new Types.ObjectId(userId),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
       return await createdHotel.save();
     } catch (error) {
@@ -573,7 +575,9 @@ export class HotelService {
     },
     getHotelsDto?: GetHotelsDto,
   ) {
-    let extraQueries: any = {};
+    let extraQueries: any = {
+      _id: '684c62839a1c1c37f7dc2cbd',
+    };
 
     if (extraFilters.isConfirmedByAdmin === false) {
       extraQueries = {
@@ -718,6 +722,7 @@ export class HotelService {
       isPublished: {
         $ne: false,
       },
+      _id: '684c62839a1c1c37f7dc2cbd',
     };
 
     // Apply basic filters
