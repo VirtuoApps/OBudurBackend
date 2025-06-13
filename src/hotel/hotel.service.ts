@@ -869,7 +869,7 @@ export class HotelService {
       query.$and.push(searchQuery);
     }
 
-    return this.hotelModel.find(query).exec();
+    return this.hotelModel.find(query).sort({ createdAt: -1 }).exec();
   }
 
   // --- Helper for Relation Validation (Example) ---
