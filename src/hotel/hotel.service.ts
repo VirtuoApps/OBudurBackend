@@ -567,9 +567,7 @@ export class HotelService {
     },
     getHotelsDto?: GetHotelsDto,
   ) {
-    let extraQueries: any = {
-      _id: '684c62839a1c1c37f7dc2cbd',
-    };
+    let extraQueries: any = {};
 
     if (extraFilters.isConfirmedByAdmin === false) {
       extraQueries = {
