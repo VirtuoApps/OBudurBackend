@@ -280,4 +280,8 @@ export class UpdateHotelDto {
   @IsOptional()
   @IsArray()
   viewIds: string[];
+
+  @IsObject()
+  @IsOptional()
+  floorPosition?: Record<string, string>;
 }

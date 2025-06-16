@@ -220,6 +220,9 @@ export class Hotel {
   @Prop({ type: Array })
   infrastructureFeatureIds: string[];
 
+  @Prop({ type: MongooseSchema.Types.Map, of: String })
+  floorPosition?: Map<string, string>; //Bulunduğu Kat
+
   @Prop({ type: Array })
   viewIds: string[];
 }

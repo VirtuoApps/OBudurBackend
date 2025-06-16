@@ -265,4 +265,8 @@ export class CreateHotelDto {
   @IsOptional()
   @IsArray()
   viewIds: string[];
+
+  @IsObject()
+  @IsOptional()
+  floorPosition?: Record<string, string>;
 }
