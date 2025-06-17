@@ -22,6 +22,11 @@ export class UpdateFeatureDto {
   @IsOptional()
   featureType?: string;
 
+  @IsString()
+  @IsIn(['house', 'office', 'land', 'other', 'all'])
+  @IsOptional()
+  housingType?: string;
+
   @IsBoolean()
   @IsOptional()
   isQuickFilter?: boolean;

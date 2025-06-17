@@ -36,12 +36,16 @@ export class FeatureService {
   }
 
   async findAll(query: queryType, getFeaturesDto: GetFeaturesDto) {
-    const { featureType } = getFeaturesDto;
+    const { featureType, housingType } = getFeaturesDto;
 
     const extraQueries: any = {};
 
     if (featureType) {
       extraQueries.featureType = featureType;
+    }
+
+    if (housingType) {
+      extraQueries.housingType = housingType;
     }
 
     return await generalPaginate({

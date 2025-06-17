@@ -4,4 +4,8 @@ export class GetFeaturesDto {
   @IsString()
   @IsOptional()
   featureType: string;
+
+  @IsString()
+  @IsOptional()
+  housingType: string;
 }

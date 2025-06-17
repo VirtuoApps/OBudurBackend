@@ -18,6 +18,14 @@ export class Feature {
   })
   featureType: string;
 
+  @Prop({
+    type: String,
+    enum: ['house', 'office', 'land', 'other', 'all'],
+    required: false,
+    default: 'all',
+  })
+  housingType: string;
+
   @Prop({ type: Boolean, required: true, default: false })
   isQuickFilter: boolean;
 }
