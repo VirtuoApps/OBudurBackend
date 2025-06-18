@@ -22,7 +22,6 @@ export class Feature {
     type: String,
     enum: ['house', 'office', 'land', 'other', 'all'],
     required: false,
-    default: 'all',
   })
   housingType: string;
 
