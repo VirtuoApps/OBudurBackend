@@ -38,4 +38,8 @@ export class UpdateMineAccountDto {
   @IsOptional()
   @IsString()
   birthDate: string;
+
+  @IsOptional()
+  @IsString()
+  estateAgency: string;
 }
