@@ -712,6 +712,7 @@ export class HotelService {
       isPublished: {
         $ne: false,
       },
+      isConfirmedByAdmin: true,
     };
 
     // Apply basic filters
