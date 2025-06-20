@@ -134,7 +134,7 @@ export class AuthService {
    * @throws BadRequestException if email already exists
    */
   async register(registerDto: RegisterDto) {
-    const { email, password, firstName, lastName } = registerDto;
+    const { email, password } = registerDto;
 
     const existsUser = await this.users.findOne({ email });
 
@@ -157,8 +157,6 @@ export class AuthService {
 
     const newUser = await this.users.create({
       email,
-      firstName,
-      lastName,
       password: hashedPassword,
       createdAt: new Date(),
       emailVerifyCode: generatedSixDigitCode,
