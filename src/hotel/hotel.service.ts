@@ -306,6 +306,14 @@ export class HotelService {
       featureType: 'general',
     });
 
+    const infrastructureFeatures = await this.featureModel.find({
+      featureType: 'infrastructure',
+    });
+
+    const sceneryFeatures = await this.featureModel.find({
+      featureType: 'scenery',
+    });
+
     // Initialize collections for unique values
     const housingTypes = new Map();
     const floorTypes = new Map();
@@ -465,6 +473,8 @@ export class HotelService {
       accessibilityFeatures: Array.from(accessibilityFeatures.values()),
       faceFeatures: Array.from(faceFeatures.values()),
       entranceType: Array.from(entranceTypeSet.values()),
+      infrastructureFeatures: Array.from(infrastructureFeatures.values()),
+      sceneryFeatures: Array.from(sceneryFeatures.values()),
     };
   }
 
