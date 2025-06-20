@@ -89,6 +89,12 @@ export class SavedFilter {
   faceFeatureIds: string[] | null;
 
   @Prop({ type: [String], default: null })
+  infrastructureFeatureIds: string[] | null;
+
+  @Prop({ type: [String], default: null })
+  sceneryFeatureIds: string[] | null;
+
+  @Prop({ type: [String], default: null })
   locationFeatureIds: string[] | null;
 
   @Prop({ type: Boolean, default: null })

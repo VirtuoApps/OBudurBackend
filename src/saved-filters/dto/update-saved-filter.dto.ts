@@ -150,6 +150,16 @@ export class UpdateSavedFilterDto {
   @IsArray()
   @IsOptional()
   @IsString({ each: true })
+  infrastructureFeatureIds?: string[] | null;
+
+  @IsArray()
+  @IsOptional()
+  @IsString({ each: true })
+  sceneryFeatureIds?: string[] | null;
+
+  @IsArray()
+  @IsOptional()
+  @IsString({ each: true })
   locationFeatureIds?: string[] | null;
 
   @IsBoolean()
