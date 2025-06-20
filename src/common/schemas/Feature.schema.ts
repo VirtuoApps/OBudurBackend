@@ -13,7 +13,15 @@ export class Feature {
 
   @Prop({
     type: String,
-    enum: ['inside', 'outside', 'general', 'for-olds-and-disabled', 'face'],
+    enum: [
+      'inside',
+      'outside',
+      'general',
+      'for-olds-and-disabled',
+      'face',
+      'infrastructure',
+      'scenery',
+    ],
     required: true,
   })
   featureType: string;

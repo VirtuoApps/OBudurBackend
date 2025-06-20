@@ -28,7 +28,15 @@ export class CreateFeatureDto {
   iconUrl?: string;
 
   @IsString()
-  @IsIn(['inside', 'outside', 'general', 'for-olds-and-disabled', 'face'])
+  @IsIn([
+    'inside',
+    'outside',
+    'general',
+    'for-olds-and-disabled',
+    'face',
+    'infrastructure',
+    'scenery',
+  ])
   @IsNotEmpty()
   featureType: string;
 
