@@ -1,6 +1,5 @@
 import {
   IsString,
-  IsNotEmpty,
   IsOptional,
   IsNumber,
   IsArray,
@@ -20,30 +19,27 @@ import { Type } from 'class-transformer';
 class PriceDto {
   @IsNumber()
   @IsOptional()
-  @Min(0)
   amount?: number;
 
   @IsString()
   @IsOptional()
-  @MaxLength(3)
   currency?: string; // Defaults to USD in schema
 }
 
 class DistanceDto {
   @IsMongoId()
-  @IsNotEmpty()
+  @IsOptional()
   typeId: string; // Validate as MongoId string
 
   @IsNumber()
-  @IsNotEmpty()
-  @Min(0)
+  @IsOptional()
   value: number;
 }
 
 class GeoPointDto {
   @IsString()
   @IsIn(['Point'])
-  @IsNotEmpty()
+  @IsOptional()
   type: 'Point';
 
   @IsArray()
@@ -56,7 +52,7 @@ class GeoPointDto {
 // --- Main DTOs ---
 export class CreateHotelDto {
   @IsObject()
-  @IsNotEmpty()
+  @IsOptional()
   title: Record<string, string>;
 
   @IsObject()
@@ -85,7 +81,6 @@ export class CreateHotelDto {
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   floorCount?: number;
 
   @IsOptional()
@@ -105,12 +100,10 @@ export class CreateHotelDto {
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   projectArea?: number;
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   totalSize?: number;
 
   @IsNumber()
@@ -220,7 +213,6 @@ export class CreateHotelDto {
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   buildingAge?: number;
 
   @IsBoolean()
