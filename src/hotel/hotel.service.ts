@@ -89,7 +89,7 @@ export class HotelService {
 
     // Fetch all features in a single query
     const allFeatures = await this.featureModel.find({
-      _id: { $in: hotel.featureIds },
+      _id: { $in: [...hotel.featureIds, ...hotel.faces] },
     });
 
     // Categorize features based on their properties
@@ -104,6 +104,10 @@ export class HotelService {
     );
     const quickFilters = allFeatures.filter(
       (feature) => feature.isQuickFilter === true,
+    );
+
+    const faces = allFeatures.filter(
+      (feature) => feature.featureType === 'face',
     );
 
     const allDistances = await this.distanceTypeModel.find({
@@ -135,6 +139,7 @@ export class HotelService {
         outsideFeatures,
         distances: populatedDistances,
         quickFilters,
+        faces,
       },
       manager,
     };

@@ -127,22 +127,18 @@ export class CreateHotelDto {
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   roomCount?: number;
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   bathroomCount?: number;
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   balconyCount?: number;
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   bedRoomCount?: number;
 
   @IsObject()
