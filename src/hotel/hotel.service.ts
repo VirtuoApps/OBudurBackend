@@ -38,6 +38,19 @@ export class HotelService {
     private hotelMessagesModel: Model<HotelMessagesDocument>,
   ) {}
 
+  async updateAllHotelsSlugs() {
+    const hotels = await this.hotelModel.find({});
+
+    for (const hotel of hotels) {
+      const slug = slugify(hotel.title.get('tr'), {
+        lower: true,
+        strict: true,
+      });
+      console.log(slug);
+      await this.hotelModel.findByIdAndUpdate(hotel._id, { slug });
+    }
+  }
+
   async updateAll() {
     await this.hotelModel.deleteMany({
       'title.tr': { $regex: 'Hotel', $options: 'i' },
@@ -498,7 +511,7 @@ export class HotelService {
       }
     }
 
-    const slug = slugify(createHotelDto.title.en, {
+    const slug = slugify(createHotelDto.title.tr, {
       lower: true,
       strict: true,
     });
