@@ -8,7 +8,7 @@ export class MailService {
   async sendVerifyCode(verifyCode: string, email: string) {
     await this.mailerService.sendMail({
       to: email,
-      subject: 'Oberon Doğrulama Linkiniiz',
+      subject: 'Obudur Doğrulama Linkiniiz',
       html: `
         <!DOCTYPE html>
         <html>
