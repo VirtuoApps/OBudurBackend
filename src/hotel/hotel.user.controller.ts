@@ -25,4 +25,9 @@ export class HotelUserController {
   async findAll(@Query() filterDto: FilterHotelDto) {
     return this.hotelService.filterHotels(filterDto);
   }
+
+  @Get('/manager/:managerId')
+  getManagerHotels(@Param('managerId') managerId: string) {
+    return this.hotelService.getManagerHotels(managerId);
+  }
 }

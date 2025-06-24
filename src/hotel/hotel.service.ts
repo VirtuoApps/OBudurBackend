@@ -891,6 +891,29 @@ export class HotelService {
     return this.hotelModel.find(query).sort({ createdAt: -1 }).exec();
   }
 
+  async getManagerHotels(managerId: string) {
+    const manager = await this.userModel.findById(managerId);
+
+    if (!manager) {
+      throw new NotFoundException(`Manager with ID ${managerId} not found`);
+    }
+
+    const hotels = await this.hotelModel
+      .find({ managerId: new Types.ObjectId(managerId) })
+      .sort({ createdAt: -1 });
+
+    return {
+      manager: {
+        _id: manager._id,
+        firstName: manager.firstName,
+        lastName: manager.lastName,
+        phoneNumber: manager.phoneNumber,
+        profilePicture: manager.profilePicture,
+      },
+      hotels,
+    };
+  }
+
   // --- Helper for Relation Validation (Example) ---
   /*
   private async validateRelations(featureIds?: string[], distanceTypeIds?: string[]): Promise<void> {
