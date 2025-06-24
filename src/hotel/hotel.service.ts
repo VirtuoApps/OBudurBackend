@@ -909,6 +909,7 @@ export class HotelService {
         lastName: manager.lastName,
         phoneNumber: manager.phoneNumber,
         profilePicture: manager.profilePicture,
+        estateAgency: manager.estateAgency,
       },
       hotels,
     };
