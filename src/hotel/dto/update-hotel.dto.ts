@@ -116,12 +116,10 @@ export class UpdateHotelDto {
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   projectArea?: number;
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   totalSize?: number;
 
   @IsNumber()
@@ -138,22 +136,18 @@ export class UpdateHotelDto {
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   roomCount?: number;
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   bathroomCount?: number;
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   balconyCount?: number;
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   bedRoomCount?: number;
 
   @IsObject()
@@ -239,7 +233,6 @@ export class UpdateHotelDto {
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   buildingAge?: number;
 
   @IsBoolean()
