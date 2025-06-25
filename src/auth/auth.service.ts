@@ -55,6 +55,10 @@ export class AuthService {
 
     const user = await this.users.findById(userId);
 
+    console.log({
+      birthDate,
+    });
+
     if (!user) {
       throw new NotFoundException({
         errorCode: errorCodes.USER_NOT_FOUND,
@@ -67,7 +71,23 @@ export class AuthService {
 
     if (firstName) updateData.firstName = firstName;
     if (lastName) updateData.lastName = lastName;
-    if (phoneNumber) updateData.phoneNumber = phoneNumber;
+    if (phoneNumber) {
+
+      updateData.phoneNumber = phoneNumber;
+
+      const checkIsPhoneNumberExists = await this.users.findOne({
+        phoneNumber,
+        _id: { $ne: userId },
+      });
+
+      if (checkIsPhoneNumberExists) {
+        throw new BadRequestException({
+          errorCode: errorCodes.PHONE_NUMBER_ALREADY_EXISTS,
+          message: 'Bu telefon numarası zaten kullanılıyor',
+          statusCode: 400,
+        });
+      }
+    }
     if (profilePicture) updateData.profilePicture = profilePicture;
     if (birthDate) updateData.birthDate = new Date(birthDate);
     if (estateAgency) updateData.estateAgency = estateAgency;
@@ -102,6 +122,7 @@ export class AuthService {
 
     return {
       accessToken: tokens.accessToken,
+      ...updatedUser.toObject(),
     };
   }
 
