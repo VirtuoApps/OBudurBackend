@@ -96,7 +96,6 @@ export class UpdateHotelDto {
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   floorCount?: number;
 
   @IsOptional()
