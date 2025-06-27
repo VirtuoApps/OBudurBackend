@@ -22,7 +22,6 @@ import { Type } from 'class-transformer';
 class PriceUpdateDto {
   @IsNumber()
   @IsOptional()
-  @Min(0)
   amount?: number;
 
   @IsString()
@@ -38,7 +37,6 @@ class DistanceUpdateDto {
 
   @IsNumber()
   @IsOptional()
-  @Min(0)
   value?: number;
 }
 
