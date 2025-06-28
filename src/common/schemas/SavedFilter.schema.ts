@@ -126,6 +126,9 @@ export class SavedFilter {
 
   @Prop({ type: Number })
   resultCount: number;
+
+  @Prop({ type: [MongooseSchema.Types.Mixed], default: null })
+  selectedRoomTypes: any[] | null;
 }
 
 export const SavedFilterSchema = SchemaFactory.createForClass(SavedFilter);

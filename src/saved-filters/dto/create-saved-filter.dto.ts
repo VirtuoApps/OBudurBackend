@@ -191,4 +191,8 @@ export class CreateSavedFilterDto {
   @IsNumber()
   @IsOptional()
   resultCount?: number | null;
+
+  @IsOptional()
+  @IsArray()
+  selectedRoomTypes: any[] | null;
 }

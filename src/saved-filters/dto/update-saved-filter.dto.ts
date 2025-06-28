@@ -191,4 +191,8 @@ export class UpdateSavedFilterDto {
   @IsNumber()
   @IsOptional()
   resultCount?: number | null;
+
+  @IsArray()
+  @IsOptional()
+  selectedRoomTypes?: any[] | null;
 }
