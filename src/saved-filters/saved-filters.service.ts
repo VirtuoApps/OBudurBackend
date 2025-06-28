@@ -42,6 +42,30 @@ export class SavedFiltersService {
     });
   }
 
+  async findAllByUserForMobile(userId: string) {
+    const mineSavedFilters = await this.savedFilterModel
+      .find({ userId })
+      .exec();
+
+    const editedResult = [];
+
+    mineSavedFilters.forEach((filter) => {
+      editedResult.push({
+        filterName: filter.filterName,
+        enableNotifications: filter.enableNotifications,
+        enableMailNotifications: filter.enableMailNotifications,
+        listingType: filter.listingType,
+        selectedFeatures: filter.selectedFeatures,
+        propertyType: filter.propertyType,
+        category: filter.roomAsText,
+        selectedLocation: filter.selectedLocation,
+        resultCount: filter.resultCount,
+      });
+    });
+
+    return editedResult;
+  }
+
   async findAllByUser(userId: string): Promise<any> {
     const mineSavedFilters = await this.savedFilterModel
       .find({ userId })

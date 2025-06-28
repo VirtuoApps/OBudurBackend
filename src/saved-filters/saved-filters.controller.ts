@@ -32,6 +32,11 @@ export class SavedFiltersController {
     return this.savedFiltersService.create(createSavedFilterDto, userId);
   }
 
+  @Get('/mine-for-mobile')
+  findMineForMobile(@UserId() userId: string) {
+    return this.savedFiltersService.findAllByUserForMobile(userId);
+  }
+
   @Get('/mine')
   findMine(@UserId() userId: string) {
     return this.savedFiltersService.findAllByUser(userId);
