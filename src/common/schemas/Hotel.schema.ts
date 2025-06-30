@@ -32,6 +32,16 @@ class LocationSubSchema {
   coordinates: number[];
 }
 
+// Define image schema for ordered images
+@Schema({ _id: false })
+class ImageSubSchema {
+  @Prop({ type: String, required: true })
+  url: string;
+
+  @Prop({ type: Number, required: true })
+  order: number;
+}
+
 // --- Main Hotel Schema ---
 @Schema({ timestamps: true, collection: 'hotels' })
 export class Hotel {
@@ -89,8 +99,8 @@ export class Hotel {
   @Prop({ type: [PriceSubSchema] })
   price?: PriceSubSchema[];
 
-  @Prop({ type: [String] })
-  images?: string[];
+  @Prop({ type: [ImageSubSchema] })
+  images?: ImageSubSchema[];
 
   /* Details */
   @Prop({ type: String })

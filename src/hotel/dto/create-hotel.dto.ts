@@ -53,6 +53,17 @@ class GeoPointDto {
   coordinates: [number, number];
 }
 
+class ImageDto {
+  @IsString()
+  @IsNotEmpty()
+  url: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(0)
+  order: number;
+}
+
 // --- Main DTOs ---
 export class CreateHotelDto {
   @IsObject()
@@ -91,8 +102,9 @@ export class CreateHotelDto {
 
   @IsArray()
   @IsOptional()
-  @IsString({ each: true })
-  images?: string[];
+  @ValidateNested({ each: true })
+  @Type(() => ImageDto)
+  images?: ImageDto[];
 
   /* Details */
   @IsString()
