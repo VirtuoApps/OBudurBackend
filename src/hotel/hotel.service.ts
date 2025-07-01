@@ -22,6 +22,7 @@ import {
   HotelMessagesDocument,
 } from 'src/common/schemas/HotelMessages.schema';
 import { GetHotelsDto } from './dto/get-hotels.dto';
+import { CurrencyService } from '../common/services/currency.service';
 // Import related services if validation is needed
 // import { FeatureService } from '../feature/feature.service';
 // import { DistanceTypeService } from '../distancetype/distancetype.service';
@@ -36,6 +37,7 @@ export class HotelService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(HotelMessages.name)
     private hotelMessagesModel: Model<HotelMessagesDocument>,
+    private readonly currencyService: CurrencyService,
   ) {}
 
   async updateAllHotelsSlugs() {
@@ -541,6 +543,10 @@ export class HotelService {
         ...d,
         typeId: new Types.ObjectId(d.typeId),
       })),
+      // Process prices with currency conversion
+      price: createHotelDto.price
+        ? await this.processPricesWithConversion(createHotelDto.price)
+        : undefined,
       // Location is already in correct format via DTO
     };
 
@@ -703,6 +709,13 @@ export class HotelService {
           typeId: d.typeId ? new Types.ObjectId(d.typeId) : undefined, // Handle optional typeId in update
         }))
         .filter((d) => d.typeId && d.value !== undefined); // Filter out incomplete distance updates if needed
+    }
+    
+    // Process prices with currency conversion if prices are being updated
+    if (updateHotelDto.price) {
+      updateData.price = await this.processPricesWithConversion(
+        updateHotelDto.price,
+      );
     }
 
     try {
@@ -913,6 +926,49 @@ export class HotelService {
       },
       hotels,
     };
+  }
+
+  private async processPricesWithConversion(prices: any[]): Promise<any[]> {
+    if (!prices || prices.length === 0) {
+      return prices;
+    }
+
+    // Check if we have both TRY and USD prices
+    const hasTRY = prices.some((p) => p.currency === 'TRY');
+    const hasUSD = prices.some((p) => p.currency === 'USD');
+
+    // If we have both currencies, return as is
+    if (hasTRY && hasUSD) {
+      return prices;
+    }
+
+    // If we only have TRY, convert to USD and add both
+    if (hasTRY && !hasUSD) {
+      const tryPrice = prices.find((p) => p.currency === 'TRY');
+      if (tryPrice && tryPrice.amount) {
+        try {
+          const usdAmount = await this.currencyService.convertTryToUsd(
+            tryPrice.amount,
+          );
+
+          return [
+            ...prices,
+            {
+              amount: usdAmount,
+              currency: 'USD',
+            },
+          ];
+        } catch (error) {
+          console.error('Failed to convert TRY to USD:', error);
+          // Return original prices if conversion fails
+          return prices;
+        }
+      }
+    }
+
+    // If we only have USD, we could convert to TRY, but since the requirement
+    // is that frontend sends TRY, this case shouldn't happen normally
+    return prices;
   }
 
   // --- Helper for Relation Validation (Example) ---
