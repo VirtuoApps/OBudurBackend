@@ -3,13 +3,12 @@ import { Injectable } from '@nestjs/common';
 import { S3 } from 'aws-sdk';
 
 const s3 = new S3({
-  endpoint: `https://5f39e626343dc1549f9f44d330f0d249.r2.cloudflarestorage.com/moniapp`,
-  accessKeyId: 'cff0a3e32245e76eed296f3d56bd8d67',
-  secretAccessKey:
-    'a3f19089646df1ef266675ee0fab0eb1b90c8e7c3ba9ddc172137574c3be814d',
-  // region: process.env.AWS_REGION,
-  signatureVersion: 'v4',
   region: 'auto',
+  endpoint: `https://8e234426b68cc4b0beb6145043c62fff.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: `32f3861704ce8e7ee962217584dfbddf`,
+    secretAccessKey: `53c393bf584c4579d9557b879442f89be3a3d1c90c2821f07f8a8625fbe1ec47`,
+  },
 });
 
 @Injectable()
@@ -18,9 +17,11 @@ export class CloudflareR2Service {
     const mime = require('mime-types'); // Make sure to install mime-types package
     const contentType = mime.lookup(fileName) || 'application/octet-stream';
 
+    let fileKey = Date.now().toString();
+
     const params = {
       Bucket: process.env.R2_BUCKET_NAME,
-      Key: fileName,
+      Key: fileKey,
       Body: buffer,
       ContentType: contentType,
       ContentDisposition: 'inline',
@@ -35,15 +36,7 @@ export class CloudflareR2Service {
 
       return {
         status: 'success',
-        location: response.Location.replace(
-          'moniapp.5f39e626343dc1549f9f44d330f0d249.r2.cloudflarestorage.com',
-          'moniapp.cc',
-        )
-          .replace(
-            '5f39e626343dc1549f9f44d330f0d249.r2.cloudflarestorage.com',
-            'moniapp.cc',
-          )
-          .replace('/neo-skola', ''),
+        location: `https://video.neoskola.net/${fileKey}`,
       };
     } catch (err) {
       console.error(err);
