@@ -15,6 +15,7 @@ import {
   HotelMessages,
   HotelMessagesSchema,
 } from 'src/common/schemas/HotelMessages.schema';
+import { CurrencyModule } from 'src/common/services/currency.module';
 // Import related modules if needed for validation (e.g., check if FeatureIds/DistanceTypeIds exist)
 // import { FeatureModule } from '../feature/feature.module';
 // import { DistanceTypeModule } from '../distancetype/distancetype.module';
@@ -22,6 +23,7 @@ import {
 @Module({
   imports: [
     AuthModule,
+    CurrencyModule,
     MongooseModule.forFeature([
       { name: Hotel.name, schema: HotelSchema },
       { name: Feature.name, schema: FeatureSchema },
