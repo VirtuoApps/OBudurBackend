@@ -84,6 +84,9 @@ export class CurrencyService {
     const rate = await this.getUsdToTryRate();
     // Use buying rate for conversion (TRY -> USD)
     const usdAmount = tryAmount / rate.buyingRate;
-    return Math.round(usdAmount * 100) / 100; // Round to 2 decimal places
+
+    // Round up to the nearest thousand
+    const roundedAmount = Math.ceil(usdAmount / 1000) * 1000;
+    return roundedAmount;
   }
 }
