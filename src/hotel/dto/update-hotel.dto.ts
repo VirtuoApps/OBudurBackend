@@ -1,6 +1,5 @@
 import {
   IsString,
-  IsNotEmpty,
   IsOptional,
   IsNumber,
   IsArray,
@@ -10,7 +9,6 @@ import {
   IsIn,
   Min,
   ArrayMinSize,
-  ArrayNotEmpty,
   MaxLength,
   IsBoolean,
 } from 'class-validator';
@@ -51,6 +49,17 @@ class GeoPointUpdateDto {
   @IsNumber({}, { each: true })
   @IsOptional()
   coordinates?: [number, number];
+}
+
+class ImageUpdateDto {
+  @IsString()
+  @IsOptional()
+  url?: string;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  order?: number;
 }
 
 // --- Main Update DTO ---
@@ -103,8 +112,9 @@ export class UpdateHotelDto {
 
   @IsArray()
   @IsOptional()
-  @IsString({ each: true })
-  images?: string[];
+  @ValidateNested({ each: true })
+  @Type(() => ImageUpdateDto)
+  images?: ImageUpdateDto[];
 
   /* Details */
   @IsString()

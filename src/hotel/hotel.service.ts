@@ -267,6 +267,7 @@ export class HotelService {
           tr: `Hotel ${i}`,
           en: `Hotel ${i}`,
         },
+        images: [], // Clear images for dummy data to avoid schema conflicts
         location: {
           type: 'Point',
           coordinates: [
