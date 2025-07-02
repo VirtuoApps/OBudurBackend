@@ -12,6 +12,7 @@ import {
   ArrayMinSize,
   MaxLength,
   IsBoolean,
+  IsNotEmpty,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
