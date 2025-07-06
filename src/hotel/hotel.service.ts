@@ -711,7 +711,7 @@ export class HotelService {
         }))
         .filter((d) => d.typeId && d.value !== undefined); // Filter out incomplete distance updates if needed
     }
-    
+
     // Process prices with currency conversion if prices are being updated
     if (updateHotelDto.price) {
       updateData.price = await this.processPricesWithConversion(

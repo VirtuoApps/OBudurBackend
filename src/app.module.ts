@@ -10,7 +10,7 @@ import { FeatureModule } from './feature/feature.module';
 import { DistanceTypeModule } from './distancetype/distancetype.module';
 import { HotelModule } from './hotel/hotel.module';
 import { FileSystemModule } from './file-system/file-system.module';
-import { CloudflareR2Module } from './cloudflare-r2/cloudflare-r2.module';
+import { S3Module } from './s3/s3.module';
 import { UsersModule } from './users/users.module';
 import { HotelMessagesModule } from './hotel-messages/hotel-messages.module';
 import { FavoritesModule } from './favorites/favorites.module';
@@ -28,7 +28,7 @@ import { SavedFiltersModule } from './saved-filters/saved-filters.module';
     HotelModule,
     HotelCategoryModule,
     HotelTypesModule,
-    CloudflareR2Module,
+    S3Module,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

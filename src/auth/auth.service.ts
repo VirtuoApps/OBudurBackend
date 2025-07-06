@@ -72,7 +72,6 @@ export class AuthService {
     if (firstName) updateData.firstName = firstName;
     if (lastName) updateData.lastName = lastName;
     if (phoneNumber) {
-
       updateData.phoneNumber = phoneNumber;
 
       const checkIsPhoneNumberExists = await this.users.findOne({

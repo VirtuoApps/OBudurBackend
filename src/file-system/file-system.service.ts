@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CloudflareR2Service } from 'src/cloudflare-r2/cloudflare-r2.service';
+import { S3Service } from 'src/s3/s3.service';
 import errorCodes from 'src/common/errorCodes/errorCodes';
 import * as heicConvert from 'heic-convert';
 
 @Injectable()
 export class FileSystemService {
-  constructor(private readonly cloudflareR2Service: CloudflareR2Service) {}
+  constructor(private readonly s3Service: S3Service) {}
 
   async uploadImage(file: any) {
     if (!file) {
@@ -30,7 +30,7 @@ export class FileSystemService {
       fileExtension = 'jpg';
     }
 
-    const fileRes = await this.cloudflareR2Service.uploadFileToS3(
+    const fileRes = await this.s3Service.uploadFileToS3(
       fileBuffer,
       `images/${now.getTime()}.${fileExtension}`,
     );
@@ -51,7 +51,7 @@ export class FileSystemService {
 
     const now = new Date();
 
-    const fileRes = await this.cloudflareR2Service.uploadFileToS3(
+    const fileRes = await this.s3Service.uploadFileToS3(
       file.buffer,
       `files/${now.getTime()}.${file.originalname.split('.').pop()}`,
     );
