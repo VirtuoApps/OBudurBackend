@@ -24,7 +24,15 @@ export class TranslationService {
 
       const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash-lite' });
 
-      const prompt = `Translate the following Turkish text to English. Only return the translation, no additional text or explanations:
+      const prompt = `Translate the following Turkish text to English in the context of real estate and hospitality/hotel industry. 
+Use appropriate real estate and hotel terminology. Consider that this text might be related to:
+- Hotel amenities and features
+- Property descriptions
+- Location descriptions
+- Room types and accommodations
+- Real estate facilities and services
+
+Only return the translation, no additional text or explanations:
 
 ${turkishText}`;
 
