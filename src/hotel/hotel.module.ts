@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 import { Hotel, HotelSchema } from '../common/schemas/Hotel.schema';
 import { HotelController } from './hotel.controller';
 import { HotelService } from './hotel.service';
@@ -16,12 +17,11 @@ import {
   HotelMessagesSchema,
 } from 'src/common/schemas/HotelMessages.schema';
 import { CurrencyModule } from 'src/common/services/currency.module';
-// Import related modules if needed for validation (e.g., check if FeatureIds/DistanceTypeIds exist)
-// import { FeatureModule } from '../feature/feature.module';
-// import { DistanceTypeModule } from '../distancetype/distancetype.module';
+import { TranslationService } from 'src/common/services/translation.service';
 
 @Module({
   imports: [
+    ConfigModule,
     AuthModule,
     CurrencyModule,
     MongooseModule.forFeature([
@@ -38,6 +38,6 @@ import { CurrencyModule } from 'src/common/services/currency.module';
     // DistanceTypeModule, // Uncomment if DistanceTypeService needed for validation
   ],
   controllers: [HotelController, HotelUserController],
-  providers: [HotelService],
+  providers: [HotelService, TranslationService],
 })
 export class HotelModule {}

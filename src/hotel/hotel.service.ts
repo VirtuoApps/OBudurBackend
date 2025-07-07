@@ -23,6 +23,7 @@ import {
 } from 'src/common/schemas/HotelMessages.schema';
 import { GetHotelsDto } from './dto/get-hotels.dto';
 import { CurrencyService } from '../common/services/currency.service';
+import { TranslationService } from '../common/services/translation.service';
 // Import related services if validation is needed
 // import { FeatureService } from '../feature/feature.service';
 // import { DistanceTypeService } from '../distancetype/distancetype.service';
@@ -38,6 +39,7 @@ export class HotelService {
     @InjectModel(HotelMessages.name)
     private hotelMessagesModel: Model<HotelMessagesDocument>,
     private readonly currencyService: CurrencyService,
+    private readonly translationService: TranslationService,
   ) {}
 
   async updateAllHotelsSlugs() {
@@ -484,7 +486,12 @@ export class HotelService {
       housingType: Array.from(housingTypes.values()),
       floorType: Array.from(floorTypes.values()),
       roomAsText: Array.from(roomAsTextSet),
-      locations, // Now includes states per country
+      locations: // Now includes states per country
+        Array.from(countryDetailsMap.values()).flatMap((details) => [
+          details.countryObj,
+          ...Array.from(details.cities.values()),
+          ...Array.from(details.states.values()),
+        ]),
       state: Array.from(uniqueStates.values()), // Global list of unique states
       roomCount: sortedRoomCount,
       bathroomCount: sortedBathroomCount,
@@ -519,7 +526,18 @@ export class HotelService {
       }
     }
 
-    const slug = slugify(createHotelDto.title.tr, {
+    // Translate ONLY title and description if they only have Turkish content
+    // This ensures English versions are available for these key fields
+    const translatedTitle = await this.translationService.translateRecord(
+      createHotelDto.title,
+    );
+    const translatedDescription = createHotelDto.description
+      ? await this.translationService.translateRecord(
+          createHotelDto.description,
+        )
+      : undefined;
+
+    const slug = slugify(translatedTitle.tr, {
       lower: true,
       strict: true,
     });
@@ -529,9 +547,9 @@ export class HotelService {
       ...createHotelDto,
       no: hotelNo,
       slug,
-      title: new Map(Object.entries(createHotelDto.title)),
-      description: createHotelDto.description
-        ? new Map(Object.entries(createHotelDto.description))
+      title: new Map(Object.entries(translatedTitle)),
+      description: translatedDescription
+        ? new Map(Object.entries(translatedDescription))
         : undefined,
       address: createHotelDto.address
         ? new Map(Object.entries(createHotelDto.address))
