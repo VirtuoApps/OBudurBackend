@@ -1,5 +1,5 @@
+import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Types, Schema as MongooseSchema } from 'mongoose';
 
 export type HotelDocument = HydratedDocument<Hotel>;
 
@@ -56,6 +56,9 @@ export class Hotel {
 
   @Prop({ type: String, unique: true, required: false })
   slug: string;
+
+  @Prop({ type: MongooseSchema.Types.Map, of: String, required: false })
+  slugs: Map<string, string>; // Support for multiple language slugs (tr, en)
 
   @Prop({ type: MongooseSchema.Types.Map, of: String, required: false })
   title: Map<string, string>;

@@ -86,7 +86,10 @@ export class HotelService {
   }
 
   async getHotelBySlug(slug: string) {
-    const hotel = await this.hotelModel.findOne({ slug });
+    // Try to find hotel by main slug or by language-specific slugs
+    const hotel = await this.hotelModel.findOne({
+      $or: [{ slug: slug }, { 'slugs.tr': slug }, { 'slugs.en': slug }],
+    });
     if (!hotel) {
       throw new NotFoundException(`Hotel with slug ${slug} not found`);
     }
@@ -537,7 +540,12 @@ export class HotelService {
         )
       : undefined;
 
-    const slug = slugify(translatedTitle.tr, {
+    // Generate slugs for both Turkish and English versions
+    const slugTr = slugify(translatedTitle.tr, {
+      lower: true,
+      strict: true,
+    });
+    const slugEn = slugify(translatedTitle.en || translatedTitle.tr, {
       lower: true,
       strict: true,
     });
@@ -546,7 +554,11 @@ export class HotelService {
     const hotelData: any = {
       ...createHotelDto,
       no: hotelNo,
-      slug,
+      slug: `${slugTr}-${hotelNo}`, // Keep the main slug as Turkish for backward compatibility
+      slugs: new Map([
+        ['tr', `${slugTr}-${hotelNo}`],
+        ['en', `${slugEn}-${hotelNo}`],
+      ]),
       title: new Map(Object.entries(translatedTitle)),
       description: translatedDescription
         ? new Map(Object.entries(translatedDescription))
@@ -573,7 +585,7 @@ export class HotelService {
       const createdHotel = new this.hotelModel({
         ...hotelData,
         isPublished: true,
-        slug: `${slug}-${hotelNo}`,
+        slug: `${slugTr}-${hotelNo}`, // Keep backward compatibility with main slug
         isConfirmedByAdmin: false,
         managerId: new Types.ObjectId(userId),
         createdAt: new Date(),
@@ -705,12 +717,28 @@ export class HotelService {
     // Convert DTO Maps (Record<string, string>) back to actual Maps if present
     const updateData: any = { ...updateHotelDto };
     if (updateHotelDto.title) {
-      updateData.title = new Map(Object.entries(updateHotelDto.title));
+      // Translate title if being updated
+      const translatedTitle = await this.translationService.translateRecord(updateHotelDto.title);
+      updateData.title = new Map(Object.entries(translatedTitle));
+      
+      // Update slugs when title changes
+      const slugTr = slugify(translatedTitle.tr, { lower: true, strict: true });
+      const slugEn = slugify(translatedTitle.en || translatedTitle.tr, { lower: true, strict: true });
+      
+      // Get hotel number for slug generation
+      const existingHotel = await this.hotelModel.findById(id);
+      if (existingHotel) {
+        updateData.slug = `${slugTr}-${existingHotel.no}`;
+        updateData.slugs = new Map([
+          ['tr', `${slugTr}-${existingHotel.no}`],
+          ['en', `${slugEn}-${existingHotel.no}`],
+        ]);
+      }
     }
     if (updateHotelDto.description) {
-      updateData.description = new Map(
-        Object.entries(updateHotelDto.description),
-      );
+      // Translate description if being updated
+      const translatedDescription = await this.translationService.translateRecord(updateHotelDto.description);
+      updateData.description = new Map(Object.entries(translatedDescription));
     }
     if (updateHotelDto.address) {
       updateData.address = new Map(Object.entries(updateHotelDto.address));
