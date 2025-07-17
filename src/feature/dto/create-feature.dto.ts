@@ -1,15 +1,12 @@
 import {
-  IsString,
-  IsNotEmpty,
-  IsOptional,
-  IsUrl,
-  IsIn,
-  IsObject,
   IsBoolean,
-  // ValidateNested, // Not needed for basic object check
-  // IsMap, // Does not exist
+  IsIn,
+  IsNotEmpty,
+  IsNumber,
+  IsObject,
+  IsOptional,
+  IsString,
 } from 'class-validator';
-// import { Type } from 'class-transformer'; // Not needed without ValidateNested
 
 // Helper DTO for Map<string, string>
 // Direct validation of Maps is complex with class-validator.
@@ -48,4 +45,8 @@ export class CreateFeatureDto {
   @IsBoolean()
   @IsOptional()
   isQuickFilter: boolean;
+
+  @IsNumber()
+  @IsOptional()
+  order?: number;
 }

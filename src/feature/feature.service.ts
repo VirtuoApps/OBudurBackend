@@ -22,7 +22,10 @@ export class FeatureService {
   }
 
   async allQuickFilters() {
-    return await this.featureModel.find({ isQuickFilter: true }).exec();
+    return await this.featureModel
+      .find({ isQuickFilter: true })
+      .sort({ order: 1, createdAt: 1 })
+      .exec();
   }
 
   async create(createFeatureDto: CreateFeatureDto): Promise<Feature> {
@@ -67,9 +70,12 @@ export class FeatureService {
       extraQueries.featureType = featureType;
     }
 
+    // Add default sorting by order field for quick filters
+    const sortQuery = query.sort || { order: 1, createdAt: 1 };
+
     return await generalPaginate({
       model: this.featureModel,
-      query,
+      query: { ...query, sort: sortQuery },
       searchFields: ['name.tr', 'name.en'], // Adjust fields as necessary
       extraQueries,
     });

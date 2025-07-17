@@ -1,10 +1,10 @@
 import {
-  IsString,
-  IsOptional,
-  IsUrl,
-  IsIn,
-  IsObject,
   IsBoolean,
+  IsIn,
+  IsNumber,
+  IsObject,
+  IsOptional,
+  IsString,
 } from 'class-validator';
 
 // Manually define Update DTO
@@ -38,4 +38,8 @@ export class UpdateFeatureDto {
   @IsBoolean()
   @IsOptional()
   isQuickFilter?: boolean;
+
+  @IsNumber()
+  @IsOptional()
+  order?: number;
 }

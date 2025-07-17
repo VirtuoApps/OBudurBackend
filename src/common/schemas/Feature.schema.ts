@@ -1,5 +1,5 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export type FeatureDocument = HydratedDocument<Feature>;
 
@@ -35,6 +35,9 @@ export class Feature {
 
   @Prop({ type: Boolean, required: true, default: false })
   isQuickFilter: boolean;
+
+  @Prop({ type: Number, required: false })
+  order?: number;
 }
 
 export const FeatureSchema = SchemaFactory.createForClass(Feature);
