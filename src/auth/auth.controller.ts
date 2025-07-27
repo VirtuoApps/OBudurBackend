@@ -53,9 +53,9 @@ export class AuthController {
     return this.authService.resendVerifyEmail(userId);
   }
 
-  @Patch('/verify-email/:verifyCode')
-  verifyEmail(@Param('verifyCode') verifyCode: string) {
-    return this.authService.verifyEmail(verifyCode);
+  @Patch('/verify-email/:verifyToken')
+  verifyEmail(@Param('verifyToken') verifyToken: string) {
+    return this.authService.verifyEmail(verifyToken);
   }
 
   @Post('/forgot-password')

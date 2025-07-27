@@ -18,6 +18,7 @@ import { MailDroppersModule } from './mail-droppers/mail-droppers.module';
 import { HotelCategoryModule } from './hotel-category/hotel-category.module';
 import { HotelTypesModule } from './hotel-types/hotel-types.module';
 import { SavedFiltersModule } from './saved-filters/saved-filters.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -36,7 +37,8 @@ import { SavedFiltersModule } from './saved-filters/saved-filters.module';
     MailerModule.forRoot({
       transport: {
         host: process.env.MAIL_HOST,
-        secure: false,
+        port: parseInt(process.env.MAIL_PORT) || 2525,
+        secure: false, // Mailtrap uses TLS, not SSL
         auth: {
           user: process.env.MAIL_USER,
           pass: process.env.MAIL_PASS,
@@ -52,6 +54,7 @@ import { SavedFiltersModule } from './saved-filters/saved-filters.module';
     FavoritesModule,
     MailDroppersModule,
     SavedFiltersModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
