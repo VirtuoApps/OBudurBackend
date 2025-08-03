@@ -4,7 +4,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { ConfigService } from '@nestjs/config';
 import { MailerService } from '@nestjs-modules/mailer';
-import { MailtrapTransport } from 'mailtrap';
+import { MailtrapClient } from 'mailtrap';
 
 export interface MailOptions {
   to: string | string[];
@@ -27,7 +27,7 @@ export interface MailtrapTemplateOptions {
   templateVariables?: Record<string, any>;
   subject?: string; // Optional, will use default if not provided
   from?: {
-    address: string;
+    email: string;
     name: string;
   };
 }
@@ -36,7 +36,7 @@ export interface MailtrapTemplateOptions {
 export class MailService {
   private readonly logger = new Logger(MailService.name);
   private readonly transporter: nodemailer.Transporter;
-  private readonly mailtrapTransporter: nodemailer.Transporter;
+  private readonly mailtrapClient: MailtrapClient;
 
   constructor(
     private readonly mailerService: MailerService,
@@ -56,14 +56,12 @@ export class MailService {
       maxMessages: 100,
     });
 
-    // Create Mailtrap API transporter with token
+    // Create Mailtrap Client for template emails
     const mailtrapToken = this.configService.get('MAILTRAP_TOKEN');
     if (mailtrapToken) {
-      this.mailtrapTransporter = nodemailer.createTransport(
-        MailtrapTransport({
-          token: mailtrapToken,
-        }),
-      );
+      this.mailtrapClient = new MailtrapClient({
+        token: mailtrapToken,
+      });
     }
   }
 
@@ -237,7 +235,7 @@ export class MailService {
   async sendMailWithTemplate(
     templateOptions: MailtrapTemplateOptions,
   ): Promise<void> {
-    if (!this.mailtrapTransporter) {
+    if (!this.mailtrapClient) {
       throw new Error(
         'Mailtrap API token not configured. Cannot use template method.',
       );
@@ -245,26 +243,23 @@ export class MailService {
 
     try {
       const sender = templateOptions.from || {
-        address: this.configService.get(
+        email: this.configService.get(
           'MAIL_FROM_ADDRESS',
-          'hello@demomailtrap.co',
-          // 'hello@obudur.com',
+          'hello@obudur.com',
         ),
         name: this.configService.get('MAIL_FROM_NAME', 'Obudur'),
       };
 
       const recipients = Array.isArray(templateOptions.to)
-        ? templateOptions.to
-        : [templateOptions.to];
+        ? templateOptions.to.map(email => ({ email }))
+        : [{ email: templateOptions.to }];
 
-      await this.mailtrapTransporter.sendMail({
+      await this.mailtrapClient.send({
         from: sender,
         to: recipients,
-        subject: templateOptions.subject || 'Email Verification', // Use provided subject or default
-        text: 'Please enable HTML to view this email.', // Required fallback text
         template_uuid: templateOptions.templateUuid,
         template_variables: templateOptions.templateVariables || {},
-      } as any); // Using 'as any' to bypass type checking for Mailtrap specific properties
+      });
 
       this.logger.log(
         `Template email sent successfully to ${templateOptions.to}. Template: ${templateOptions.templateUuid}`,
@@ -299,8 +294,13 @@ export class MailService {
       subject: 'Obudur Doğrulama Linkiniz',
       templateVariables: {
         user_name: userName || 'Kullanıcı',
-        verification_link: `https://obudur.com/eposta-dogrulama/${verifyCode}`,
+        verification_link: `https://obudur.com/verify-link/${verifyCode}`,
         verification_code: verifyCode,
+        today_date: new Date().toLocaleDateString('tr-TR', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        }),
       },
     });
   }
@@ -378,7 +378,7 @@ export class MailService {
     templateUuid: string,
     batchSize = 10,
   ): Promise<void> {
-    if (!this.mailtrapTransporter) {
+    if (!this.mailtrapClient) {
       throw new Error(
         'Mailtrap API token not configured. Cannot use template method.',
       );
@@ -814,9 +814,9 @@ export class MailService {
       this.logger.log('SMTP transporter connection closed');
     }
 
-    if (this.mailtrapTransporter) {
-      this.mailtrapTransporter.close();
-      this.logger.log('Mailtrap API transporter connection closed');
+    // Mailtrap Client doesn't need explicit connection closing
+    if (this.mailtrapClient) {
+      this.logger.log('Mailtrap client connection will be closed automatically');
     }
   }
 }

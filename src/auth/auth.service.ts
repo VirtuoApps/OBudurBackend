@@ -225,6 +225,15 @@ export class AuthService {
       });
     }
 
+    // Check if email is verified
+    if (!user.verified) {
+      throw new BadRequestException({
+        errorCode: errorCodes.EMAIL_NOT_FOUND, // Using existing error code temporarily
+        message: 'Lütfen önce e-posta adresinizi doğrulayın',
+        statusCode: 400,
+      });
+    }
+
     const tokens = this.generateTokens(user);
 
     return {
@@ -346,21 +355,6 @@ export class AuthService {
         statusCode: 404,
       });
     }
-
-    // if (user.forgotPasswordSendDate) {
-    //   //Check is 10 minutes passed
-    //   const dateNow = new Date();
-    //   const diff = dateNow.getTime() - user.forgotPasswordSendDate.getTime();
-
-    //   if (diff < 600000) {
-    //     throw new BadRequestException({
-    //       errorCode: errorCodes.FORGOT_PASSWORD_CODE_ALREADY_SENT,
-    //       message:
-    //         'Şifre sıfırlama talebini her 10 dakikada bir gönderebilirsiniz',
-    //       statusCode: 400,
-    //     });
-    //   }
-    // }
 
     const generatedSixDigitCode = Math.floor(100000 + Math.random() * 900000);
 
