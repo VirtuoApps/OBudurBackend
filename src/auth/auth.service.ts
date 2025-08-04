@@ -15,6 +15,7 @@ import { MailService } from 'src/mail/mail.service';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { UpdateMineAccountDto } from './dto/update-mine-account.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AuthService {
@@ -168,10 +169,10 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const generatedSixDigitCode = Math.floor(100000 + Math.random() * 900000);
+    const verificationToken = uuidv4();
 
-    await this.mailService.sendVerifyCode(
-      generatedSixDigitCode.toString(),
+    await this.mailService.sendVerifyCodeWithTemplate(
+      verificationToken,
       email,
     );
 
@@ -179,7 +180,7 @@ export class AuthService {
       email,
       password: hashedPassword,
       createdAt: new Date(),
-      emailVerifyCode: generatedSixDigitCode,
+      emailVerifyCode: verificationToken,
       role: 'user',
     });
 
@@ -224,6 +225,15 @@ export class AuthService {
       });
     }
 
+    // Check if email is verified
+    if (!user.verified) {
+      throw new BadRequestException({
+        errorCode: errorCodes.EMAIL_NOT_FOUND, // Using existing error code temporarily
+        message: 'Lütfen önce e-posta adresinizi doğrulayın',
+        statusCode: 400,
+      });
+    }
+
     const tokens = this.generateTokens(user);
 
     return {
@@ -232,20 +242,20 @@ export class AuthService {
   }
 
   /**
-   * Verifies a user's email using the verification code
-   * @param verifyCode - The verification code sent to user's email
+   * Verifies a user's email using the verification token
+   * @param verifyToken - The verification token sent to user's email
    * @returns Object containing success status and message
-   * @throws NotFoundException if verification code is invalid
+   * @throws NotFoundException if verification token is invalid
    */
-  async verifyEmail(verifyCode: string) {
+  async verifyEmail(verifyToken: string) {
     const user = await this.users.findOne({
-      emailVerifyCode: verifyCode,
+      emailVerifyCode: verifyToken,
     });
 
     if (!user) {
       throw new NotFoundException({
         errorCode: errorCodes.INVALID_CODE,
-        message: 'Geçersiz kod, lütfen "verifyCode" değerinizi kontrol edin',
+        message: 'Geçersiz doğrulama bağlantısı, lütfen tekrar deneyin',
         statusCode: 404,
       });
     }
@@ -253,6 +263,7 @@ export class AuthService {
     await this.users.findByIdAndUpdate(user._id, {
       $set: {
         verified: true,
+        emailVerifyCode: null, // Clear the verification token
       },
     });
 
@@ -304,16 +315,16 @@ export class AuthService {
       }
     }
 
-    const generatedSixDigitCode = Math.floor(100000 + Math.random() * 900000);
+    const verificationToken = uuidv4();
 
-    await this.mailService.sendVerifyCode(
-      generatedSixDigitCode.toString(),
+    await this.mailService.sendVerifyCodeWithTemplate(
+      verificationToken,
       user.email,
     );
 
     await this.users.findByIdAndUpdate(user._id, {
       $set: {
-        emailVerifyCode: generatedSixDigitCode,
+        emailVerifyCode: verificationToken,
         verifySendDate: new Date(),
       },
     });
@@ -344,35 +355,36 @@ export class AuthService {
         statusCode: 404,
       });
     }
+    console.log('User found:', user);
+    // Check if forgot password code was recently sent (10 minutes cooldown)
+    if (user.forgotPasswordSendDate) {
+      const dateNow = new Date();
+      const diff = dateNow.getTime() - user.forgotPasswordSendDate.getTime();
 
-    // if (user.forgotPasswordSendDate) {
-    //   //Check is 10 minutes passed
-    //   const dateNow = new Date();
-    //   const diff = dateNow.getTime() - user.forgotPasswordSendDate.getTime();
+      if (diff < 600000) {
+        throw new BadRequestException({
+          errorCode: errorCodes.FORGOT_PASSWORD_CODE_ALREADY_SENT,
+          message:
+            'Şifre sıfırlama talebini her 10 dakikada bir gönderebilirsiniz',
+          statusCode: 400,
+        });
+      }
+    }
 
-    //   if (diff < 600000) {
-    //     throw new BadRequestException({
-    //       errorCode: errorCodes.FORGOT_PASSWORD_CODE_ALREADY_SENT,
-    //       message:
-    //         'Şifre sıfırlama talebini her 10 dakikada bir gönderebilirsiniz',
-    //       statusCode: 400,
-    //     });
-    //   }
-    // }
+    const resetToken = uuidv4();
 
-    const generatedSixDigitCode = Math.floor(100000 + Math.random() * 900000);
+    await this.mailService.sendForgotPasswordWithTemplate(
+      resetToken,
+      user.email,
+      user.firstName || 'Kullanıcı',
+    );
 
     await this.users.findByIdAndUpdate(user._id, {
       $set: {
-        forgotPasswordCode: generatedSixDigitCode,
+        forgotPasswordCode: resetToken,
         forgotPasswordSendDate: new Date(),
       },
     });
-
-    await this.mailService.sendForgotPasswordMail(
-      generatedSixDigitCode.toString(),
-      user.email,
-    );
 
     return {
       status: 'success',
@@ -386,12 +398,22 @@ export class AuthService {
    * @param resetPasswordDto - Data transfer object containing new password
    * @returns Object containing success status and message
    * @throws NotFoundException if forgot password code is invalid
+   * @throws BadRequestException if code expired or passwords don't match
    */
   async resetPassword(
     forgotPasswordCode: string,
     resetPasswordDto: ResetPasswordDto,
   ) {
-    const { password } = resetPasswordDto;
+    const { password, confirmPassword } = resetPasswordDto;
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      throw new BadRequestException({
+        errorCode: errorCodes.INVALID_PASSWORD,
+        message: 'Şifreler eşleşmiyor',
+        statusCode: 400,
+      });
+    }
 
     const user = await this.users.findOne({
       forgotPasswordCode,
@@ -404,6 +426,22 @@ export class AuthService {
           'Geçersiz kod, lütfen "forgotPasswordCode" değerinizi kontrol edin',
         statusCode: 404,
       });
+    }
+
+    // Check if the reset code has expired (15 minutes)
+    if (user.forgotPasswordSendDate) {
+      const dateNow = new Date();
+      const diff = dateNow.getTime() - user.forgotPasswordSendDate.getTime();
+
+      // 15 minutes = 900000 milliseconds
+      if (diff > 900000) {
+        throw new BadRequestException({
+          errorCode: errorCodes.INVALID_CODE,
+          message:
+            'Şifre sıfırlama kodunun süresi dolmuş, lütfen tekrar deneyin',
+          statusCode: 400,
+        });
+      }
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
