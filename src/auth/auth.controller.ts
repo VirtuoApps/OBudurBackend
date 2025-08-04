@@ -37,10 +37,11 @@ export class AuthController {
     return this.authService.updateMineAccount(userId, updateMineAccountDto);
   }
 
-  @Post('/register')
-  register(@Body() registerDto: RegisterDto) {
-    return this.authService.register(registerDto);
-  }
+@Post('/register')
+@UsePipes(ValidationPipe) // Bu satırı ekliyorsun
+register(@Body() registerDto: RegisterDto) {
+  return this.authService.register(registerDto);
+}
 
   @Post('/login')
   login(@Body() loginDto: LoginDto) {

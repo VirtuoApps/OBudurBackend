@@ -18,6 +18,7 @@ import { MailDroppersModule } from './mail-droppers/mail-droppers.module';
 import { HotelCategoryModule } from './hotel-category/hotel-category.module';
 import { HotelTypesModule } from './hotel-types/hotel-types.module';
 import { SavedFiltersModule } from './saved-filters/saved-filters.module';
+import { EidsModule } from './eids/eids.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { SavedFiltersModule } from './saved-filters/saved-filters.module';
     FavoritesModule,
     MailDroppersModule,
     SavedFiltersModule,
+    EidsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

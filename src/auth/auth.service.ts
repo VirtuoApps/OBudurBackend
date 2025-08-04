@@ -154,8 +154,11 @@ export class AuthService {
    * @throws BadRequestException if email already exists
    */
   async register(registerDto: RegisterDto) {
-    const { email, password } = registerDto;
-
+    const { email, password, firstName, lastName, phoneNumber } = registerDto;
+    const safeFirstName =
+  firstName && firstName.trim().length >= 2 ? firstName.trim() : 'Adı';
+    const safeLastName =
+  lastName && lastName.trim().length >= 2 ? lastName.trim() : 'Soyadı';
     const existsUser = await this.users.findOne({ email });
 
     if (existsUser) {
@@ -175,13 +178,16 @@ export class AuthService {
       email,
     );
 
-    const newUser = await this.users.create({
-      email,
-      password: hashedPassword,
-      createdAt: new Date(),
-      emailVerifyCode: generatedSixDigitCode,
-      role: 'user',
-    });
+      const newUser = await this.users.create({
+        email,
+        password: hashedPassword,
+        firstName: safeFirstName,
+        lastName: safeLastName,
+        phoneNumber,
+        createdAt: new Date(),
+        emailVerifyCode: generatedSixDigitCode,
+        role: 'user',
+      });
 
     const tokens = this.generateTokens(newUser);
 

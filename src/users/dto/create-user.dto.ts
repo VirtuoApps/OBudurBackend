@@ -36,4 +36,8 @@ export class CreateUserDto {
   @IsString()
   @IsOptional()
   profilePicture?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  phoneNumber?: string;
 }
