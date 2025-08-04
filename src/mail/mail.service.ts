@@ -314,11 +314,7 @@ export class MailService {
     userName?: string,
   ): Promise<void> {
     const templateUuid = this.configService.get('MAILTRAP_RESET_TEMPLATE');
-
-    if (!templateUuid) {
-      // Fallback to custom HTML template
-      return this.sendForgotPasswordMail(resetCode, email);
-    }
+    console.log('Template UUID:', templateUuid);
 
     await this.sendMailWithTemplate({
       to: email,
@@ -328,6 +324,11 @@ export class MailService {
         user_name: userName || 'Kullanıcı',
         reset_code: resetCode,
         reset_link: `https://obudur.com/sifre-sifirlama/${resetCode}`,
+        today_date: new Date().toLocaleDateString('tr-TR', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        }),
       },
     });
   }
