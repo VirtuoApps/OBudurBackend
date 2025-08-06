@@ -375,7 +375,7 @@ export class AuthService {
       }
     }
 
-    const resetToken = uuidv4();
+    const resetToken = Math.floor(100000 + Math.random() * 900000).toString();
 
     await this.mailService.sendForgotPasswordWithTemplate(
       resetToken,
