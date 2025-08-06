@@ -155,7 +155,7 @@ export class AuthService {
    * @throws BadRequestException if email already exists
    */
   async register(registerDto: RegisterDto) {
-    const { email, password } = registerDto;
+    const { email, password, firstName, lastName, phoneNumber } = registerDto;
 
     const existsUser = await this.users.findOne({ email });
 
@@ -177,6 +177,9 @@ export class AuthService {
     );
 
     const newUser = await this.users.create({
+      firstName,
+      lastName,
+      phoneNumber,
       email,
       password: hashedPassword,
       createdAt: new Date(),
@@ -274,7 +277,7 @@ export class AuthService {
   }
 
   /**
-   * Resends verification email to user
+   * Resends verification email to user with the same verification token
    * @param userId - The ID of the user requesting verification email
    * @returns Object containing success status and message
    * @throws NotFoundException if user not found
@@ -315,7 +318,8 @@ export class AuthService {
       }
     }
 
-    const verificationToken = uuidv4();
+    // Use existing verification token or generate new one if not exists
+    const verificationToken = user.emailVerifyCode || uuidv4();
 
     await this.mailService.sendVerifyCodeWithTemplate(
       verificationToken,
